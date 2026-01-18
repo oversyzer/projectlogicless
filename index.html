@@ -7,137 +7,211 @@
     <style>
         /* Estilos Gerais */
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('logiclesswebsitebackground.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: #000; /* Fundo sólido para focar nas seções */
             color: white; 
             margin: 0;
-            padding-top: 80px; /* Espaço para o header fixo não cobrir o conteúdo */
+            padding: 0;
         }
 
-        /* Cabeçalho Fixo (Estilo Small World Games) */
+        /* 1. Header com Efeito Blur e Alinhamento Centralizado */
         header {
             position: fixed;
             top: 0;
-            left: 0;
             width: 100%;
-            height: 70px;
-            background: rgba(0, 0, 0, 0.9);
+            height: 80px;
+            background: rgba(0, 0, 0, 0.7); /* Transparência */
+            backdrop-filter: blur(15px); /* Efeito de vidro da imagem */
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center; /* Centraliza o conteúdo interno */
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+        }
+
+        .header-content {
+            width: 100%;
+            max-width: 1200px; /* Limita a largura igual ao site original */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 50px;
-            box-sizing: border-box;
-            z-index: 1000;
-            border-bottom: 1px solid #00FFCC; /* Linha neon fina igual da foto */
+            padding: 0 40px;
         }
 
-        .logo { font-weight: bold; font-size: 20px; letter-spacing: 1px; }
+        .logo { font-weight: bold; font-size: 22px; letter-spacing: 1px; }
         
         nav a {
             color: white;
             text-decoration: none;
-            margin-left: 25px;
-            font-size: 14px;
+            margin-left: 30px;
+            font-size: 13px;
             font-weight: bold;
             text-transform: uppercase;
             transition: 0.3s;
         }
-
         nav a:hover { color: #00FFCC; }
 
-        /* Seção "Our Games" */
-        .container { max-width: 1100px; margin: auto; padding: 40px 20px; text-align: center; }
-        
-        .stats { color: #00FFCC; font-size: 24px; font-weight: bold; margin-bottom: 40px; }
-        .stats span { color: white; display: block; font-size: 16px; margin-top: 5px; }
+        /* 2. Seções e Containers */
+        section {
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px; /* Alinhamento centralizado dos elementos */
+            margin: auto;
+        }
+
+        /* 3. Seção WHO WE ARE (Inspirada na imagem) */
+        .who-we-are {
+            background: linear-gradient(to bottom, #0a0a0a, #000);
+        }
+        .who-we-are h1 { font-size: 45px; margin-bottom: 30px; }
+        .who-we-are p { 
+            color: #ccc; 
+            line-height: 1.8; 
+            font-size: 16px; 
+            max-width: 850px; 
+            margin: 0 auto 20px; 
+        }
+        .highlight { color: #00FFCC; font-weight: bold; }
+
+        /* 4. Stats e Games */
+        .stats-grid {
+            margin: 40px 0;
+        }
+        .stats-number { color: #00FFCC; font-size: 32px; font-weight: bold; margin: 0; }
+        .stats-label { font-size: 18px; color: white; margin-bottom: 20px; }
 
         .games-grid {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             flex-wrap: wrap;
+            margin-top: 50px;
         }
 
-        /* Card estilo a imagem que você mandou */
         .game-card {
-            background: #1a1a1a;
-            width: 300px;
-            border-radius: 12px;
+            background: #111;
+            width: 320px;
+            border-radius: 15px;
             overflow: hidden;
-            border: 1px solid #333;
-            transition: 0.3s;
+            border: 1px solid #222;
             text-align: left;
+            position: relative;
         }
 
-        .game-card:hover { transform: translateY(-10px); border-color: #00FFCC; }
+        .game-thumb { width: 100%; height: 180px; background: #222; background-size: cover; }
 
-        .game-thumb {
-            width: 100%;
-            height: 170px;
-            background: #333; /* Placeholder para imagem */
-            background-size: cover;
-        }
+        .game-info { padding: 20px; }
+        .game-info h3 { margin: 0 0 10px 0; }
+        .game-info p { font-size: 14px; color: #aaa; margin: 5px 0; display: flex; align-items: center; }
 
-        .game-info { padding: 15px; }
-        .game-info h3 { margin: 0 0 10px 0; font-size: 18px; }
-        .game-info p { font-size: 13px; color: #ccc; margin: 5px 0; }
-
-        .tag {
+        .tag-badge {
+            position: absolute;
+            top: -10px; right: 20px;
             background: #00FFCC;
             color: black;
-            font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 4px;
+            padding: 5px 15px;
+            border-radius: 5px;
             font-weight: bold;
-            display: inline-block;
-            margin-bottom: 10px;
+            font-size: 12px;
+            z-index: 10;
         }
+
+        /* 5. Rodapé (Footer estilo Small World Games) */
+        footer {
+            background: #000;
+            padding: 40px 0;
+            border-top: 1px solid #00FFCC;
+            display: flex;
+            justify-content: center;
+        }
+
+        .footer-content {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .social-icons a { color: white; margin-right: 15px; text-decoration: none; font-size: 18px; }
+
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">SERVERLOGICLESS</div>
-        <nav>
-            <a href="#">About</a>
-            <a href="#">Games</a>
-            <a href="#">Brands</a>
-            <a href="#">Join</a>
-        </nav>
+        <div class="header-content">
+            <div class="logo">SERVERLOGICLESS</div>
+            <nav>
+                <a href="#about">About</a>
+                <a href="#games">Games</a>
+                <a href="#brands">Brands</a>
+                <a href="#join">Join</a>
+            </nav>
+        </div>
     </header>
 
-    <div class="container">
-        <h1>OUR GAMES</h1>
-        <div class="stats">
-            2 Billion+ <span>Total Visits</span>
-            30 Million+ <span>Monthly Players</span>
+    <section id="about" class="who-we-are">
+        <div class="container">
+            <h1>WHO WE ARE</h1>
+            <p><span class="highlight">ServerLogicLess</span> é um estúdio de desenvolvimento focado em criar experiências de alta qualidade no <span class="highlight">Roblox</span>.</p>
+            <p>Focamos em entregar jogabilidade imersiva com <span class="highlight">95%+ de aprovação</span> dos nossos jogadores.</p>
         </div>
+    </section>
 
-        <div class="games-grid">
-            <div class="game-card">
-                <div class="game-thumb" style="background-image: url('foto_do_jogo1.jpg');"></div>
-                <div class="game-info">
-                    <span class="tag">#1 on Roblox!</span>
-                    <h3>Anime Defenders</h3>
-                    <p>👁️ 740M+ Visits</p>
-                    <p>👍 97% Approval</p>
-                </div>
+    <section id="games">
+        <div class="container">
+            <h1>OUR GAMES</h1>
+            <div class="stats-grid">
+                <p class="stats-number">2 Billion+</p>
+                <p class="stats-label">Total Visits</p>
+                <p class="stats-number">30 Million+</p>
+                <p class="stats-label">Monthly Players</p>
             </div>
 
-            <div class="game-card">
-                <div class="game-thumb" style="background-image: url('foto_do_jogo2.jpg');"></div>
-                <div class="game-info">
-                    <span class="tag">Action PvP</span>
-                    <h3>Death Ball</h3>
-                    <p>👁️ 579M+ Visits</p>
-                    <p>👍 96% Approval</p>
+            <div class="games-grid">
+                <div class="game-card">
+                    <span class="tag-badge">#1 on Roblox!</span>
+                    <div class="game-thumb"></div>
+                    <div class="game-info">
+                        <h3>Anime Defenders</h3>
+                        <p>👁️ 740M+ Visits</p>
+                        <p>👍 97% Approval</p>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <span class="tag-badge">Action PvP</span>
+                    <div class="game-thumb"></div>
+                    <div class="game-info">
+                        <h3>Death Ball</h3>
+                        <p>👁️ 579M+ Visits</p>
+                        <p>👍 96% Approval</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="social-icons">
+                <a href="#">𝕏</a>
+                <a href="#">in</a>
+            </div>
+            <div>© 2026 ServerLogicLess Interactive Pvt Ltd.</div>
+        </div>
+    </footer>
 
 </body>
 </html>
