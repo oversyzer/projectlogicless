@@ -138,7 +138,7 @@
         }
 
         /* 6. Game Card com Efeito de Hover Restaurado */
-        .game-card {
+.game-card {
             background: #111;
             width: 320px;
             border-radius: 15px;
@@ -146,7 +146,12 @@
             border: 1px solid #222;
             text-align: left;
             position: relative;
-            transition: all 0.3s ease; /* Transição suave para o efeito */
+            transition: all 0.3s ease;
+            
+            /* Novas propriedades para o link funcionar corretamente: */
+            display: block;        /* Faz a tag <a> se comportar como uma caixa */
+            text-decoration: none; /* Remove o sublinhado padrão de links */
+            color: inherit;        /* Mantém a cor original dos textos (branco/cinza) */
         }
 
         /* Efeito de Zoom e Brilho solicitado */
@@ -240,6 +245,7 @@
             </div>
 
             <div class="games-grid">
+                <!-- Card 1: Sem link -->
                 <div class="game-card">
                     <span class="tag-badge">#1 on Roblox!</span>
                     <div class="game-thumb"></div>
@@ -249,7 +255,9 @@
                         <p>👍 97% Approval</p>
                     </div>
                 </div>
-                <div class="game-card">
+
+                <!-- Card 2: COM LINK (Alterado para tag <a>) -->
+                <a href="https://www.roblox.com/games/2758947812" class="game-card" target="_blank">
                     <span class="tag-badge">Action PvP</span>
                     <div class="game-thumb"></div>
                     <div class="game-info">
@@ -257,7 +265,9 @@
                         <p>👁️ 579M+ Visits</p>
                         <p>👍 96% Approval</p>
                     </div>
-                </div>
+                </a>
+
+                <!-- Card 3: Sem link -->
                 <div class="game-card">
                     <span class="tag-badge">New Experience</span>
                     <div class="game-thumb"></div>
