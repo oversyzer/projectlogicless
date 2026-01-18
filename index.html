@@ -3,11 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ServerLogicLess - Studio</title>
+    
+    <!-- 1. TÍTULO E FAVICON ATUALIZADOS -->
+    <title>LogicLess</title>
+    <link rel="icon" type="image/png" href="logiclessfavicon.png">
+
+    <!-- 2. IMPORTAÇÃO DA FONTE MONTSERRAT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
     <style>
         /* Estilos Gerais */
         body { 
-            font-family: 'Segoe UI', sans-serif; 
+            /* Fonte alterada para Montserrat */
+            font-family: 'Montserrat', sans-serif; 
             background-color: #000; /* Fundo sólido para focar nas seções */
             color: white; 
             margin: 0;
@@ -39,7 +49,32 @@
             padding: 0 40px;
         }
 
-        .logo { font-weight: bold; font-size: 22px; letter-spacing: 1px; }
+        /* 3. ESTILOS DO NOVO LOGO */
+        .logo {
+            display: flex; /* Alinha a imagem e o texto lado a lado */
+            align-items: center;
+            gap: 12px; /* Espaço entre a imagem e o texto */
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo img {
+            height: 45px; /* Define a altura da sua imagem de logo */
+            width: auto;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column; /* Coloca um span em cima do outro */
+            line-height: 1.0; /* Reduz o espaçamento entre as linhas */
+        }
+        
+        .logo-text span {
+            font-weight: 900; /* Fonte bem grossa para destaque */
+            font-size: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
         
         nav a {
             color: white;
@@ -70,8 +105,9 @@
         /* 3. Seção WHO WE ARE (Inspirada na imagem) */
         .who-we-are {
             background: linear-gradient(to bottom, #0a0a0a, #000);
+            padding-top: 180px; /* Aumenta o espaço do topo para não ficar atrás do header */
         }
-        .who-we-are h1 { font-size: 45px; margin-bottom: 30px; }
+        .who-we-are h1 { font-size: 45px; margin-bottom: 30px; font-weight: 900; }
         .who-we-are p { 
             color: #ccc; 
             line-height: 1.8; 
@@ -87,6 +123,10 @@
         }
         .stats-number { color: #00FFCC; font-size: 32px; font-weight: bold; margin: 0; }
         .stats-label { font-size: 18px; color: white; margin-bottom: 20px; }
+
+        h1 {
+            font-weight: 900;
+        }
 
         .games-grid {
             display: flex;
@@ -109,7 +149,7 @@
         .game-thumb { width: 100%; height: 180px; background: #222; background-size: cover; }
 
         .game-info { padding: 20px; }
-        .game-info h3 { margin: 0 0 10px 0; }
+        .game-info h3 { margin: 0 0 10px 0; font-weight: 700; }
         .game-info p { font-size: 14px; color: #aaa; margin: 5px 0; display: flex; align-items: center; }
 
         .tag-badge {
@@ -152,7 +192,14 @@
 
     <header>
         <div class="header-content">
-            <div class="logo">LOGICLESS</div>
+            <!-- LOGO ATUALIZADO COM IMAGEM E TEXTO EMPILHADO -->
+            <a href="#" class="logo">
+                <img src="logiclesslogo.png" alt="LogicLess Logo">
+                <div class="logo-text">
+                    <span>Logic</span>
+                    <span>Less</span>
+                </div>
+            </a>
             <nav>
                 <a href="#about">About</a>
                 <a href="#games">Games</a>
