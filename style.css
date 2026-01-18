@@ -136,10 +136,15 @@ section {
 }
 
 .game-card:hover {
-    transform: translateY(-10px) scale(1.02);
-    border-color: #00FFCC;
+    transform: translateY(-10px) scale(1.02); /* Sobe e dá zoom */
+    border-color: #00FFCC; /* Brilho na cor destaque */
     box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
     cursor: pointer;
+    
+    /* AQUI ESTÁ A CORREÇÃO: */
+    /* O !important força o navegador a usar 0.3s quando o mouse está em cima, */
+    /* ignorando a lentidão da animação de entrada */
+    transition: all 0.3s ease !important;
 }
 
 .game-thumb { width: 100%; height: 180px; background: #222; background-size: cover; background-position: center; }
