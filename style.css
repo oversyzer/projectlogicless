@@ -9,7 +9,7 @@ body {
     color: white; 
     margin: 0;
     padding: 0;
-    overflow-x: hidden; /* Evita rolagem lateral indesejada */
+    overflow-x: hidden;
 }
 
 /* Header com Efeito Blur */
@@ -120,7 +120,10 @@ section {
     margin-top: 50px;
 }
 
-/* Game Card */
+/* =========================================
+   ESTILO E ANIMAÇÃO DOS CARDS
+   ========================================= */
+
 .game-card {
     background: #111;
     width: 320px;
@@ -129,22 +132,22 @@ section {
     border: 1px solid #222;
     text-align: left;
     position: relative;
-    transition: all 0.3s ease;
     display: block;
     text-decoration: none;
     color: inherit;
+
+    /* AQUI ESTÁ A CORREÇÃO FINAL: */
+    /* Definimos que qualquer animação de movimento (transform), sombra e borda */
+    /* DEVE ser rápida (0.3s), não importa o que aconteça no scroll. */
+    /* O !important garante que o hover de entrar e sair seja rápido. */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 
 .game-card:hover {
-    transform: translateY(-10px) scale(1.02); /* Sobe e dá zoom */
-    border-color: #00FFCC; /* Brilho na cor destaque */
+    transform: translateY(-10px) scale(1.02);
+    border-color: #00FFCC;
     box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
     cursor: pointer;
-    
-    /* AQUI ESTÁ A CORREÇÃO: */
-    /* O !important força o navegador a usar 0.3s quando o mouse está em cima, */
-    /* ignorando a lentidão da animação de entrada */
-    transition: all 0.3s ease !important;
 }
 
 .game-thumb { width: 100%; height: 180px; background: #222; background-size: cover; background-position: center; }
@@ -188,29 +191,29 @@ footer {
 .social-icons a { color: white; margin-right: 15px; text-decoration: none; font-size: 18px; }
 
 /* =========================================
-   ANIMAÇÃO DE SCROLL (NOVO)
+   ANIMAÇÃO DE SCROLL
    ========================================= */
 
-/* Estado oculto (antes da animação) */
+/* Estado oculto (antes de aparecer na tela) */
 .hidden {
     opacity: 0;
-    filter: blur(5px);
-    transform: translateY(50px); /* Começa 50px para baixo */
-    transition: all 1s ease-out; /* Duração da animação */
+    filter: blur(10px);
+    transform: translateY(50px); /* Posição inicial: 50px para baixo */
+    
+    /* AQUI ESTÁ O TRUQUE: */
+    /* Animamos lentamente (1s) apenas a Opacidade e o Blur. */
+    /* Removemos o 'transform' daqui, para que ele obedeça a regra rápida (0.3s) */
+    /* definida no .game-card lá em cima. Assim o hover não trava. */
+    transition: opacity 1s ease-out, filter 1s ease-out;
 }
 
 /* Estado visível (quando entra na tela) */
 .show {
     opacity: 1;
     filter: blur(0);
-    transform: translateY(0); /* Volta para a posição original */
+    transform: translateY(0);
 }
 
-/* Efeito Cascata para os Cards dos Jogos */
-/* Isso faz o segundo e o terceiro card aparecerem um pouquinho depois do primeiro */
-.games-grid .game-card:nth-child(2) {
-    transition-delay: 150ms;
-}
-.games-grid .game-card:nth-child(3) {
-    transition-delay: 300ms;
-}
+/* Delays para efeito cascata nos cards */
+.games-grid .game-card:nth-child(2) { transition-delay: 150ms; }
+.games-grid .game-card:nth-child(3) { transition-delay: 300ms; }
