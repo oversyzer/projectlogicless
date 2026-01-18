@@ -4,211 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- 1. Favicon Importado -->
+    <!-- Favicon Importado -->
     <link rel="icon" href="logiclessfavicon.png" type="image/png">
     
-    <!-- Importando a fonte Montserrat do Google Fonts -->
+    <!-- Importando a fonte Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
 
+    <!-- Link para o arquivo CSS externo -->
+    <link rel="stylesheet" href="style.css">
+
     <title>ServerLogicLess - Studio</title>
-    
-    <style>
-        /* 2. Configurações Globais e Scroll Suave */
-        html {
-            scroll-behavior: smooth; /* Faz a página deslizar suavemente ao clicar nos links do menu */
-        }
-
-        body { 
-            /* Fonte alterada para Montserrat conforme solicitado */
-            font-family: 'Montserrat', sans-serif; 
-            background-color: #000; 
-            color: white; 
-            margin: 0;
-            padding: 0;
-        }
-
-        /* 3. Header com Efeito Blur e Centralização Profissional */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 80px;
-            background: rgba(0, 0, 0, 0.3); 
-            backdrop-filter: blur(15px); /* Efeito de vidro */
-            -webkit-backdrop-filter: blur(15px);
-            display: flex;
-            justify-content: center; 
-            align-items: center;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0, 255, 204, 0.3);
-        }
-
-        .header-content {
-            width: 100%;
-            max-width: 1200px; 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
-        }
-
-        /* Estilos da Nova Logo (Imagem + Texto Empilhado) */
-        .brand-container {
-            display: flex;
-            align-items: center;
-            gap: 12px; /* Espaço entre o ícone e o texto */
-            text-decoration: none;
-            color: white;
-            cursor: pointer;
-        }
-
-        .brand-logo-img {
-            height: 45px; /* Altura da logo ajustada para o header */
-            width: auto;
-        }
-
-        .brand-text {
-            display: flex;
-            flex-direction: column; /* Faz o texto ficar um em cima do outro */
-            justify-content: center;
-            line-height: 0.9; /* Deixa as palavras mais próximas verticalmente */
-        }
-
-        .brand-text span {
-            font-weight: 800; /* Fonte bem grossa para destaque */
-            font-size: 18px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        
-        /* Menu de Navegação */
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 30px;
-            font-size: 13px;
-            font-weight: 700; /* Montserrat Bold */
-            text-transform: uppercase;
-            transition: 0.3s;
-        }
-        nav a:hover { color: #00FFCC; }
-
-        /* 4. Seções e Containers */
-        section {
-            padding: 120px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1100px; 
-            margin: auto;
-        }
-
-        /* Seção WHO WE ARE */
-        .who-we-are {
-            background: linear-gradient(to bottom, #0a0a0a, #000);
-        }
-        .who-we-are h1 { font-size: 45px; margin-bottom: 30px; font-weight: 800; }
-        .who-we-are p { 
-            color: #ccc; 
-            line-height: 1.8; 
-            font-size: 16px; 
-            max-width: 850px; 
-            margin: 0 auto 20px; 
-        }
-        .highlight { color: #00FFCC; font-weight: bold; }
-
-        /* 5. Stats e Games Grid */
-        .stats-grid { margin: 40px 0; }
-        .stats-number { color: #00FFCC; font-size: 32px; font-weight: 800; margin: 0; }
-        .stats-label { font-size: 18px; color: white; margin-bottom: 20px; }
-
-        .games-grid {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-            margin-top: 50px;
-        }
-
-        /* 6. Game Card com Efeito de Hover Restaurado */
-.game-card {
-            background: #111;
-            width: 320px;
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid #222;
-            text-align: left;
-            position: relative;
-            transition: all 0.3s ease;
-            
-            /* Novas propriedades para o link funcionar corretamente: */
-            display: block;        /* Faz a tag <a> se comportar como uma caixa */
-            text-decoration: none; /* Remove o sublinhado padrão de links */
-            color: inherit;        /* Mantém a cor original dos textos (branco/cinza) */
-        }
-
-        /* Efeito de Zoom e Brilho solicitado */
-        .game-card:hover {
-            transform: translateY(-10px) scale(1.02); /* Sobe e dá zoom */
-            border-color: #00FFCC; /* Brilho na cor destaque */
-            box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
-            cursor: pointer;
-        }
-
-        .game-thumb { width: 100%; height: 180px; background: #222; background-size: cover; background-position: center; }
-
-        .game-info { padding: 20px; }
-        .game-info h3 { margin: 0 0 10px 0; font-weight: 700; }
-        .game-info p { font-size: 14px; color: #aaa; margin: 5px 0; display: flex; align-items: center; }
-
-        .tag-badge {
-            position: absolute;
-            top: -10px; right: 20px;
-            background: #00FFCC;
-            color: black;
-            padding: 5px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 12px;
-            z-index: 10;
-        }
-
-        /* 7. Rodapé */
-        footer {
-            background: #000;
-            padding: 40px 0;
-            border-top: 1px solid #00FFCC;
-            display: flex;
-            justify-content: center;
-        }
-
-        .footer-content {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .social-icons a { color: white; margin-right: 15px; text-decoration: none; font-size: 18px; }
-
-    </style>
 </head>
 <body>
 
     <header>
         <div class="header-content">
-            <!-- Nova Estrutura da Logo -->
             <div class="brand-container">
                 <img src="logiclesslogo.png" alt="LogicLess Logo" class="brand-logo-img">
                 <div class="brand-text">
@@ -227,7 +39,8 @@
     </header>
 
     <section id="about" class="who-we-are">
-        <div class="container">
+        <!-- Adicionei a classe "hidden" para animar este bloco -->
+        <div class="container hidden">
             <h1>WHO WE ARE</h1>
             <p><span class="highlight">ServerLogicLess</span> é um estúdio de desenvolvimento focado em criar experiências de alta qualidade no <span class="highlight">Roblox</span>.</p>
             <p>Focamos em entregar jogabilidade imersiva com <span class="highlight">95%+ de aprovação</span> dos nossos jogadores.</p>
@@ -236,8 +49,11 @@
 
     <section id="games">
         <div class="container">
-            <h1>OUR GAMES</h1>
-            <div class="stats-grid">
+            <!-- Adicionei "hidden" no título -->
+            <h1 class="hidden">OUR GAMES</h1>
+            
+            <!-- Adicionei "hidden" nas estatísticas -->
+            <div class="stats-grid hidden">
                 <p class="stats-number">2 Billion+</p>
                 <p class="stats-label">Total Visits</p>
                 <p class="stats-number">30 Million+</p>
@@ -245,8 +61,10 @@
             </div>
 
             <div class="games-grid">
-                <!-- Card 1: Sem link -->
-                <div class="game-card">
+                <!-- Adicionei "hidden" em cada card para animarem individualmente -->
+                
+                <!-- Card 1 -->
+                <div class="game-card hidden">
                     <span class="tag-badge">#1 on Roblox!</span>
                     <div class="game-thumb"></div>
                     <div class="game-info">
@@ -256,8 +74,8 @@
                     </div>
                 </div>
 
-                <!-- Card 2: COM LINK (Alterado para tag <a>) -->
-                <a href="https://www.roblox.com/games/2758947812" class="game-card" target="_blank">
+                <!-- Card 2 -->
+                <a href="https://www.roblox.com/games/2758947812" class="game-card hidden" target="_blank">
                     <span class="tag-badge">Action PvP</span>
                     <div class="game-thumb"></div>
                     <div class="game-info">
@@ -267,8 +85,8 @@
                     </div>
                 </a>
 
-                <!-- Card 3: Sem link -->
-                <div class="game-card">
+                <!-- Card 3 -->
+                <div class="game-card hidden">
                     <span class="tag-badge">New Experience</span>
                     <div class="game-thumb"></div>
                     <div class="game-info">
@@ -290,6 +108,9 @@
             <div>© 2026 ServerLogicLess Interactive Pvt Ltd.</div>
         </div>
     </footer>
+
+    <!-- Link para o arquivo JavaScript externo -->
+    <script src="script.js"></script>
 
 </body>
 </html>
