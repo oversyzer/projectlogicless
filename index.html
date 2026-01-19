@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Favicon Importado -->
     <link rel="icon" href="logiclessfavicon.png" type="image/png">
     
-    <!-- Importando a fonte Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
 
-    <!-- Link para o CSS externo -->
     <link rel="stylesheet" href="style.css">
 
     <title>ServerLogicLess - Studio</title>
@@ -29,7 +26,13 @@
                 </div>
             </div>
 
-            <nav>
+            <button class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <nav id="nav-menu">
                 <a href="#about">About</a>
                 <a href="#games">Games</a>
                 <a href="#brands">Brands</a>
@@ -58,7 +61,6 @@
             </div>
 
             <div class="games-grid">
-                <!-- Card 1 -->
                 <div class="game-card hidden">
                     <span class="tag-badge">#1 on Roblox!</span>
                     <div class="game-thumb"></div>
@@ -69,7 +71,6 @@
                     </div>
                 </div>
 
-                <!-- Card 2 (Link) -->
                 <a href="https://www.roblox.com/games/2758947812" class="game-card hidden" target="_blank">
                     <span class="tag-badge">Action PvP</span>
                     <div class="game-thumb"></div>
@@ -80,7 +81,6 @@
                     </div>
                 </a>
 
-                <!-- Card 3 -->
                 <div class="game-card hidden">
                     <span class="tag-badge">New Experience</span>
                     <div class="game-thumb"></div>
@@ -104,7 +104,6 @@
         </div>
     </footer>
 
-    <!-- Link para o JS externo -->
     <script src="script.js"></script>
 
 </body>
