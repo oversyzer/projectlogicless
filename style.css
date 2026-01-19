@@ -86,7 +86,7 @@ header {
 }
 
 .desktop-nav a:hover {
-    color: #ffffff; /* Alterado para Branco */
+    color: #ffffff;
 }
 
 .mobile-nav {
@@ -148,7 +148,7 @@ section {
 }
 
 .highlight {
-    color: #ffffff; /* Alterado para Branco */
+    color: #ffffff;
     font-weight: bold;
 }
 
@@ -165,7 +165,7 @@ section {
     width: 320px;
     border-radius: 15px;
     overflow: hidden;
-    border: 1px solid #222;
+    border: 1px solid transparent; /* Contorno invisível por padrão */
     text-align: left;
     position: relative;
     display: block;
@@ -174,11 +174,11 @@ section {
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 
-/* Hover unificado para Desktop e Mobile (via JS) */
+/* Hover e Foco Mobile */
 .game-card:hover, .game-card.mobile-focus {
     transform: translateY(-10px) scale(1.02);
-    border-color: #ffffff; /* Alterado para Branco */
-    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2); /* Alterado para Branco */
+    border-color: #ffffff; /* Contorno branco aparece no hover/foco */
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
 }
 
 .game-thumb {
@@ -212,7 +212,7 @@ section {
 }
 
 .slider-btn {
-    display: none; /* Botões removidos conforme solicitado */
+    display: none;
 }
 
 .game-info {
@@ -236,7 +236,7 @@ section {
     position: absolute;
     top: 0;
     right: 20px;
-    background: #ffffff; /* Alterado para Branco */
+    background: #ffffff;
     color: black;
     padding: 5px 15px;
     border-radius: 0 0 5px 5px;
@@ -251,7 +251,7 @@ section {
 footer {
     background: #000;
     padding: 60px 0;
-    border-top: 1px solid #ffffff; /* Alterado para Branco */
+    border-top: 1px solid #ffffff;
     display: flex;
     justify-content: center;
 }
