@@ -220,7 +220,7 @@ footer {
    ========================================= */
 
 @media (max-width: 768px) {
-    /* Esconde o texto da logo */
+    /* Esconde o texto da logo no mobile */
     .brand-text {
         display: none;
     }
@@ -228,17 +228,19 @@ footer {
     /* Mostra o botão hambúrguer */
     .menu-toggle {
         display: flex;
+        z-index: 1001; /* Garante que fique acima do menu */
     }
 
-    /* Estiliza o menu dropdown */
+    /* Menu dropdown com Blur Corrigido */
     nav {
-        display: none; /* Escondido por padrão */
+        display: none; 
         flex-direction: column;
         position: absolute;
         top: 80px;
         left: 0;
         width: 100%;
-        background: rgba(0, 0, 0, 0.8);
+        /* Fundo semi-transparente essencial para o blur aparecer */
+        background: rgba(0, 0, 0, 0.6); 
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         padding: 20px 0;
@@ -246,17 +248,18 @@ footer {
         text-align: center;
     }
 
-    /* Mostra o menu quando ativo via JS */
+    /* Classe ativada pelo JavaScript */
     nav.active {
         display: flex;
     }
 
     nav a {
         margin: 15px 0;
-        font-size: 16px;
+        font-size: 18px; /* Aumentado para melhor toque no mobile */
+        margin-left: 0;  /* Remove o margin-left do desktop */
     }
 
-    /* Animação simples para o X no hambúrguer (opcional) */
+    /* Transformação do Hambúrguer em "X" */
     .menu-toggle.active .bar:nth-child(2) { opacity: 0; }
     .menu-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .menu-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
