@@ -123,7 +123,7 @@ section {
 }
 
 .section-title {
-    font-size: 55px; /* Aumentado conforme solicitado */
+    font-size: 55px;
     font-weight: 800;
     margin-bottom: 50px;
     text-transform: uppercase;
@@ -180,13 +180,58 @@ section {
     box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
 }
 
+/* Slider de Banners */
 .game-thumb {
     width: 100%;
     height: 180px;
     background: #222;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner-container {
+    width: 100%;
+    height: 100%;
+}
+
+.banner-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-size: cover;
     background-position: center;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
 }
+
+.banner-slide.active {
+    opacity: 1;
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 15;
+    font-weight: bold;
+    transition: 0.3s;
+    border-radius: 5px;
+}
+
+.slider-btn:hover {
+    background: #00FFCC;
+    color: black;
+}
+
+.prev-btn { left: 5px; }
+.next-btn { right: 5px; }
 
 .game-info {
     padding: 20px;
@@ -207,15 +252,15 @@ section {
 
 .tag-badge {
     position: absolute;
-    top: -10px;
+    top: 0; /* Colado no topo */
     right: 20px;
     background: #00FFCC;
     color: black;
     padding: 5px 15px;
-    border-radius: 5px;
+    border-radius: 0 0 5px 5px; /* Arredondado só embaixo */
     font-weight: bold;
     font-size: 12px;
-    z-index: 10;
+    z-index: 20;
 }
 
 /* =========================================
@@ -247,14 +292,14 @@ footer {
 }
 
 .social-img {
-    height: 30px; /* Tamanho ajustado dos ícones */
+    height: 30px;
     width: auto;
-    filter: brightness(0) invert(1); /* Deixa os ícones brancos */
+    filter: brightness(0) invert(1);
     transition: 0.3s;
 }
 
 .social-img:hover {
-    filter: none; /* Volta a cor original ao passar o mouse */
+    filter: none;
     transform: scale(1.1);
 }
 
@@ -356,10 +401,9 @@ footer {
     }
 
     .section-title {
-        font-size: 38px; /* Ajuste para o título não quebrar no mobile */
+        font-size: 38px;
     }
 
-    /* Botão X */
     .menu-toggle.active .bar:nth-child(2) { opacity: 0; }
     .menu-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .menu-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
