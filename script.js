@@ -95,7 +95,7 @@ async function fetchRobloxData() {
             }
 
             // 3. Lógica do seu Tutorial: Banners via CDN
-            const mediaRes = await fetch(`${proxy}https://games.roblox.com/v2/games/${game.id}/media?fetchAllExperienceRelatedMedia=true`);
+            const mediaRes = await fetch(`${proxy}https://games.roblox.com/v1/games/${game.id}/media?fetchAllExperienceRelatedMedia=true`);
             const mediaData = await mediaRes.json();
             const container = card.querySelector('.banner-container');
             container.innerHTML = ''; // Limpa o "Loading..."
