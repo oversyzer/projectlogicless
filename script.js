@@ -1,4 +1,4 @@
-// --- Lógica do Intersection Observer (Animações de Scroll) ---
+// --- Lógica do Intersection Observer (Animações de Entrada) ---
 const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -11,6 +11,24 @@ const observer = new IntersectionObserver((entries) => {
 
 const hiddenElements = document.querySelectorAll('.hidden');
 hiddenElements.forEach((el) => observer.observe(el));
+
+// --- Lógica de Auto-Hover para Mobile ---
+// Ativa o efeito visual quando o card está centralizado no scroll
+const mobileHoverObserver = new IntersectionObserver((entries) => {
+    if (window.innerWidth <= 768) { // Só executa em telas menores
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('mobile-hover');
+            } else {
+                entry.target.classList.remove('mobile-hover');
+            }
+        });
+    }
+}, {
+    threshold: 0.7 // Ativa quando 70% do card estiver visível
+});
+
+document.querySelectorAll('.game-card').forEach((card) => mobileHoverObserver.observe(card));
 
 // --- Lógica do Menu Mobile ---
 const mobileMenu = document.getElementById('mobile-menu');
@@ -33,7 +51,6 @@ if (mobileMenu && navMenu) {
 }
 
 // --- Integração com a API do Roblox ---
-
 const universeIds = ["996458434", "6713567019", "8949221887"];
 const proxy = "https://corsproxy.io/?";
 
@@ -43,16 +60,10 @@ function formatNumbers(num) {
     return num;
 }
 
+// Função de Slider simplificada (Apenas transição automática, sem botões)
 function initSlider(card) {
     const slides = card.querySelectorAll('.banner-slide');
-    const nextBtn = card.querySelector('.next-btn');
-    const prevBtn = card.querySelector('.prev-btn');
-    
-    if (slides.length <= 1) {
-        if (nextBtn) nextBtn.style.display = 'none';
-        if (prevBtn) prevBtn.style.display = 'none';
-        return;
-    }
+    if (slides.length <= 1) return;
 
     let currentIndex = 0;
     function showSlide(index) {
@@ -61,19 +72,14 @@ function initSlider(card) {
         slides[currentIndex].classList.add('active');
     }
 
-    nextBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); showSlide(currentIndex + 1); });
-    prevBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); showSlide(currentIndex - 1); });
-
     setInterval(() => showSlide(currentIndex + 1), 5000);
 }
 
 async function fetchRobloxData() {
     try {
-        // 1. Detalhes (Nome, Visitas e o Gênero Correto via genre_l1)
         const detailsRes = await fetch(`${proxy}https://games.roblox.com/v1/games?universeIds=${universeIds.join(',')}`);
         const detailsData = await detailsRes.json();
 
-        // 2. Votos
         const votesRes = await fetch(`${proxy}https://games.roblox.com/v1/games/votes?universeIds=${universeIds.join(',')}`);
         const votesData = await votesRes.json();
 
@@ -81,12 +87,10 @@ async function fetchRobloxData() {
             const card = document.getElementById(`game-${game.id}`);
             if (!card) continue;
 
-            // Atualiza Texto: Nome, Visitas e o gênero_l1 (Social, etc)
             card.querySelector('.game-name').innerText = game.name;
             card.querySelector('.game-visits').innerText = `👁️ ${formatNumbers(game.visits)} Visits`;
             card.querySelector('.tag-badge').innerText = game.genre_l1 || game.genre || "Experience";
 
-            // Atualiza Aprovação
             const voteInfo = votesData.data.find(v => v.id === game.id);
             if (voteInfo) {
                 const total = voteInfo.upVotes + voteInfo.downVotes;
@@ -94,25 +98,21 @@ async function fetchRobloxData() {
                 card.querySelector('.game-approval').innerText = `👍 ${percent}% Approval`;
             }
 
-            // 3. Lógica do seu Tutorial: Banners via CDN
             const mediaRes = await fetch(`${proxy}https://games.roblox.com/v1/games/${game.id}/media?fetchAllExperienceRelatedMedia=true`);
             const mediaData = await mediaRes.json();
             const container = card.querySelector('.banner-container');
-            container.innerHTML = ''; // Limpa o "Loading..."
+            container.innerHTML = '';
 
             if (mediaData.data && mediaData.data.length > 0) {
-                // Filtra apenas imagens (assetTypeId: 1) conforme seu passo 1
                 const imageIds = mediaData.data
                     .filter(item => item.assetTypeId === 1)
                     .map(item => item.imageId);
 
                 if (imageIds.length > 0) {
-                    // Passo 2: Converte os IDs em URLs reais (usando 420x420 como você sugeriu)
                     const assetIdsParam = imageIds.join(',');
                     const thumbRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdsParam}&size=420x420&format=Png`);
                     const thumbData = await thumbRes.json();
 
-                    // Passo 3: Insere os links diretos (imageUrl) no site
                     thumbData.data.forEach((thumb, idx) => {
                         if (thumb.imageUrl) {
                             const slide = document.createElement('div');
@@ -122,11 +122,9 @@ async function fetchRobloxData() {
                         }
                     });
 
-                    // Inicializa o slider se houver mais de uma imagem
                     if (imageIds.length > 1) initSlider(card);
                 }
             } else {
-                // Fallback de segurança: Ícone se não houver banners
                 const iconRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/games/icons?universeIds=${game.id}&size=512x512&format=Png&isCircular=false`);
                 const iconData = await iconRes.json();
                 const iconInfo = iconData.data.find(i => i.targetId === game.id);
