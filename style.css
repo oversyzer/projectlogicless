@@ -216,7 +216,7 @@ footer {
 .games-grid .game-card:nth-child(3) { transition-delay: 300ms; }
 
 /* =========================================
-   MEDIA QUERIES (MOBILE)
+   MEDIA QUERIES (MOBILE) - MUDANÇAS AQUI
    ========================================= */
 
 @media (max-width: 768px) {
@@ -231,45 +231,49 @@ footer {
         z-index: 1001; /* Garante que fique acima do menu */
     }
 
-    /* Menu dropdown com Blur Corrigido */
+    /* MUDANÇA PRINCIPAL: LÓGICA DO DROPDOWN */
     nav {
-        display: none; 
+        /* 1. MANTEMOS O ELEMENTO SEMPRE PRESENTE, MAS INVISÍVEL */
+        display: flex; /* Agora é sempre flex, não muda mais */
         flex-direction: column;
         position: absolute;
         top: 80px;
         left: 0;
         width: 100%;
-        
-        /* Ajuste a transparência para o blur ser mais visível */
-        background: rgba(0, 0, 0, 0.3); 
-        
-        /* Efeito de blur (seu código já estava certo aqui) */
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px); /* Suporte para Safari */
-        
-        /* ADIÇÃO ESSENCIAL 1: EMPILHAMENTO */
-        z-index: 999; /* Coloca o menu em uma camada abaixo do header (1000) e do botão (1001) mas acima de todo o resto */
-
-        /* ADIÇÃO ESSENCIAL 2: FORÇAR RENDERIZAÇÃO */
-        transform: translateZ(0); /* Esse é o "truque" que força a aceleração de hardware e corrige o bug de renderização do blur */
-        
-        padding: 20px 0;
-        border-bottom: 1px solid rgba(0, 255, 204, 0.3);
         text-align: center;
+        padding: 20px 0;
+        
+        /* 2. O FUNDO E O BLUR SÃO APLICADOS PERMANENTEMENTE */
+        background: rgba(0, 0, 0, 0.5); 
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+        
+        /* 3. ESTADO INICIAL (ESCONDIDO) */
+        opacity: 0;
+        transform: translateY(-20px); /* Começa um pouco para cima */
+        visibility: hidden; /* Esconde de verdade, não só visualmente */
+        pointer-events: none; /* Impede cliques quando invisível */
+        
+        /* 4. A ANIMAÇÃO SUAVE */
+        transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
     }
 
-    /* Classe ativada pelo JavaScript */
+    /* QUANDO O MENU ESTÁ ATIVO, REVERTEMOS PARA O ESTADO VISÍVEL */
     nav.active {
-        display: flex;
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+        pointer-events: auto;
     }
 
     nav a {
         margin: 15px 0;
-        font-size: 18px; /* Aumentado para melhor toque no mobile */
-        margin-left: 0;  /* Remove o margin-left do desktop */
+        font-size: 18px;
+        margin-left: 0;
     }
 
-    /* Transformação do Hambúrguer em "X" */
+    /* Transformação do Hambúrguer em "X" (sem mudanças) */
     .menu-toggle.active .bar:nth-child(2) { opacity: 0; }
     .menu-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .menu-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
