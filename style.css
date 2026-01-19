@@ -1,28 +1,33 @@
-/* Configurações Globais e Scroll Suave */
+/* =========================================
+   CONFIGURAÇÕES GLOBAIS
+   ========================================= */
 html {
     scroll-behavior: smooth;
 }
-body { 
-    font-family: 'Montserrat', sans-serif; 
-    background-color: #000; 
-    color: white; 
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #000;
+    color: white;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
 }
 
-/* Header com Efeito Blur */
+/* =========================================
+   HEADER
+   ========================================= */
 header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 80px;
-    background: rgba(0, 0, 0, 0.3); 
+    background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     z-index: 1000;
     border-bottom: 1px solid rgba(0, 255, 204, 0.3);
@@ -30,30 +35,44 @@ header {
 
 .header-content {
     width: 100%;
-    max-width: 1200px; 
+    max-width: 1200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 40px;
 }
 
-/* Estilos da Logo */
 .brand-container {
     display: flex;
     align-items: center;
     gap: 12px;
 }
-.brand-logo-img { height: 45px; width: auto; }
-.brand-text { display: flex; flex-direction: column; line-height: 0.9; }
-.brand-text span { font-weight: 800; font-size: 18px; letter-spacing: 1px; text-transform: uppercase; }
+
+.brand-logo-img {
+    height: 45px;
+    width: auto;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 0.9;
+}
+
+.brand-text span {
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
 
 /* =========================================
-   ESTILO DA NAVEGAÇÃO (DESKTOP)
+   NAVEGAÇÃO (DESKTOP)
    ========================================= */
 nav {
     position: fixed;
     top: 0;
-    right: 40px; /* Alinhado à direita */
+    right: 40px;
     height: 80px;
     display: flex;
     align-items: center;
@@ -69,9 +88,12 @@ nav a {
     text-transform: uppercase;
     transition: 0.3s;
 }
-nav a:hover { color: #00FFCC; }
 
-/* Botão Hamburguer (Escondido por padrão no desktop) */
+nav a:hover {
+    color: #00FFCC;
+}
+
+/* Escondido por padrão, aparece no mobile */
 .menu-toggle {
     display: none;
     z-index: 1002;
@@ -81,9 +103,9 @@ nav a:hover { color: #00FFCC; }
    CONTEÚDO PRINCIPAL
    ========================================= */
 main {
-    /* Impede que o conteúdo comece por baixo do header fixo */
     padding-top: 80px;
 }
+
 section {
     padding: 120px 20px;
     display: flex;
@@ -91,33 +113,172 @@ section {
     align-items: center;
     text-align: center;
 }
+
 .container {
     width: 100%;
-    max-width: 1100px; 
+    max-width: 1100px;
     margin: auto;
 }
-.who-we-are { background: linear-gradient(to bottom, #0a0a0a, #000); }
-.who-we-are h1 { font-size: 45px; margin-bottom: 30px; font-weight: 800; }
-.who-we-are p { color: #ccc; line-height: 1.8; font-size: 16px; max-width: 850px; margin: 0 auto 20px; }
-.highlight { color: #00FFCC; font-weight: bold; }
-.stats-grid { margin: 40px 0; }
-.stats-number { color: #00FFCC; font-size: 32px; font-weight: 800; margin: 0; }
-.stats-label { font-size: 18px; color: white; margin-bottom: 20px; }
-.games-grid { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-top: 50px; }
-.game-card { background: #111; width: 320px; border-radius: 15px; overflow: hidden; border: 1px solid #222; text-align: left; position: relative; display: block; text-decoration: none; color: inherit; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important; }
-.game-card:hover { transform: translateY(-10px) scale(1.02); border-color: #00FFCC; box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2); cursor: pointer; }
-.game-thumb { width: 100%; height: 180px; background: #222; background-size: cover; background-position: center; }
-.game-info { padding: 20px; }
-.game-info h3 { margin: 0 0 10px 0; font-weight: 700; }
-.game-info p { font-size: 14px; color: #aaa; margin: 5px 0; display: flex; align-items: center; }
-.tag-badge { position: absolute; top: -10px; right: 20px; background: #00FFCC; color: black; padding: 5px 15px; border-radius: 5px; font-weight: bold; font-size: 12px; z-index: 10; }
-footer { background: #000; padding: 40px 0; border-top: 1px solid #00FFCC; display: flex; justify-content: center; }
-.footer-content { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; color: #666; font-size: 14px; }
-.social-icons a { color: white; margin-right: 15px; text-decoration: none; font-size: 18px; }
-.hidden { opacity: 0; filter: blur(10px); transform: translateY(50px); transition: opacity 1s ease-out, filter 1s ease-out; }
-.show { opacity: 1; filter: blur(0); transform: translateY(0); }
-.games-grid .game-card:nth-child(2) { transition-delay: 150ms; }
-.games-grid .game-card:nth-child(3) { transition-delay: 300ms; }
+
+.who-we-are {
+    background: linear-gradient(to bottom, #0a0a0a, #000);
+}
+
+.who-we-are h1 {
+    font-size: 45px;
+    margin-bottom: 30px;
+    font-weight: 800;
+}
+
+.who-we-are p {
+    color: #ccc;
+    line-height: 1.8;
+    font-size: 16px;
+    max-width: 850px;
+    margin: 0 auto 20px;
+}
+
+.highlight {
+    color: #00FFCC;
+    font-weight: bold;
+}
+
+.stats-grid {
+    margin: 40px 0;
+}
+
+.stats-number {
+    color: #00FFCC;
+    font-size: 32px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.stats-label {
+    font-size: 18px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.games-grid {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+.game-card {
+    background: #111;
+    width: 320px;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #222;
+    text-align: left;
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+.game-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: #00FFCC;
+    box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
+    cursor: pointer;
+}
+
+.game-thumb {
+    width: 100%;
+    height: 180px;
+    background: #222;
+    background-size: cover;
+    background-position: center;
+}
+
+.game-info {
+    padding: 20px;
+}
+
+.game-info h3 {
+    margin: 0 0 10px 0;
+    font-weight: 700;
+}
+
+.game-info p {
+    font-size: 14px;
+    color: #aaa;
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+}
+
+.tag-badge {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: #00FFCC;
+    color: black;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 12px;
+    z-index: 10;
+}
+
+/* =========================================
+   RODAPÉ
+   ========================================= */
+footer {
+    background: #000;
+    padding: 40px 0;
+    border-top: 1px solid #00FFCC;
+    display: flex;
+    justify-content: center;
+}
+
+.footer-content {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    color: #666;
+    font-size: 14px;
+}
+
+.social-icons a {
+    color: white;
+    margin-right: 15px;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+/* =========================================
+   ANIMAÇÕES DE SCROLL
+   ========================================= */
+.hidden {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(50px);
+    transition: opacity 1s ease-out, filter 1s ease-out;
+}
+
+.show {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+}
+
+.games-grid .game-card:nth-child(2) {
+    transition-delay: 150ms;
+}
+
+.games-grid .game-card:nth-child(3) {
+    transition-delay: 300ms;
+}
 
 /* =========================================
    MEDIA QUERIES (MOBILE)
@@ -126,10 +287,11 @@ footer { background: #000; padding: 40px 0; border-top: 1px solid #00FFCC; displ
     .header-content {
         justify-content: flex-start;
     }
+
     .brand-text {
         display: none;
     }
-    
+
     .menu-toggle {
         display: flex;
         flex-direction: column;
@@ -141,13 +303,14 @@ footer { background: #000; padding: 40px 0; border-top: 1px solid #00FFCC; displ
         top: 25px;
         right: 40px;
     }
+
     .menu-toggle .bar {
         width: 25px;
         height: 3px;
         background-color: white;
         transition: 0.3s;
     }
-    
+
     /* NAV se torna o menu dropdown */
     nav {
         position: fixed;
@@ -158,8 +321,7 @@ footer { background: #000; padding: 40px 0; border-top: 1px solid #00FFCC; displ
         height: auto;
         padding: 20px 0;
         
-        /* O BLUR FUNCIONA AQUI! */
-        background: rgba(0, 0, 0, 0.5); 
+        background: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         
@@ -185,8 +347,14 @@ footer { background: #000; padding: 40px 0; border-top: 1px solid #00FFCC; displ
         font-size: 18px;
     }
 
-    /* Animação do "X" */
-    .menu-toggle.active .bar:nth-child(2) { opacity: 0; }
-    .menu-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-    .menu-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    /* Animação do botão para "X" */
+    .menu-toggle.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    .menu-toggle.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
 }
