@@ -239,10 +239,18 @@ footer {
         top: 80px;
         left: 0;
         width: 100%;
-        /* Fundo semi-transparente essencial para o blur aparecer */
-        background: rgba(0, 0, 0, 0.6); 
+        
+        /* ALTERAÇÃO AQUI: */
+        /* Mudamos de 0.6 para 0.4 ou 0.3 para ficar mais transparente */
+        background: rgba(0, 0, 0, 0.4); 
+        
+        /* O efeito de blur */
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
+        
+        /* Opcional: Adiciona altura da tela toda para o efeito ficar mais bonito */
+        height: calc(100vh - 80px); 
+        
         padding: 20px 0;
         border-bottom: 1px solid rgba(0, 255, 204, 0.3);
         text-align: center;
