@@ -7,7 +7,7 @@ html {
 
 body {
     font-family: 'Montserrat', sans-serif;
-    background-color: #000;
+    background-color: #ccc9c9;
     color: white;
     margin: 0;
     padding: 0;
@@ -23,7 +23,6 @@ body {
 /* Proteção contra arrastar imagens */
 img {
     -webkit-user-drag: none;
-    user-drag: none;
 }
 
 body.menu-open {
