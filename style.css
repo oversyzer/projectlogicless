@@ -14,22 +14,28 @@ body {
     overflow-x: hidden;
 }
 
+/* Trava o scroll quando o menu estiver aberto */
+body.menu-open {
+    overflow: hidden;
+}
+
 /* =========================================
    HEADER
    ========================================= */
 header {
-position: fixed;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 80px;
-    background: rgba(0, 0, 0, 0.3); /* Mantido 30% */
+    background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    transition: background 0.3s ease, backdrop-filter 0.3s ease;
 }
 
 .header-content {
@@ -73,7 +79,6 @@ position: fixed;
    NAVEGAÇÃO
    ========================================= */
 
-/* NAVEGAÇÃO DESKTOP (VISÍVEL POR PADRÃO) */
 .desktop-nav a {
     color: white;
     text-decoration: none;
@@ -88,15 +93,16 @@ position: fixed;
     color: #00FFCC;
 }
 
-/* NAVEGAÇÃO MOBILE (ESCONDIDA POR PADRÃO) */
 .mobile-nav {
     display: none;
 }
 
-/* BOTÃO HAMBÚRGUER (ESCONDIDO POR PADRÃO) */
 .menu-toggle {
     display: none;
     z-index: 1002;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 /* =========================================
@@ -186,7 +192,6 @@ section {
     transform: translateY(-10px) scale(1.02);
     border-color: #00FFCC;
     box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
-    cursor: pointer;
 }
 
 .game-thumb {
@@ -272,34 +277,28 @@ footer {
     transform: translateY(0);
 }
 
-.games-grid .game-card:nth-child(2) {
-    transition-delay: 150ms;
-}
-
-.games-grid .game-card:nth-child(3) {
-    transition-delay: 300ms;
-}
-
 /* =========================================
    MEDIA QUERIES (MOBILE)
    ========================================= */
 @media (max-width: 768px) {
+    /* Unifica o fundo quando aberto */
+    body.menu-open header {
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
     .brand-text {
         display: none;
     }
 
-    /* 1. Esconde a navegação do desktop */
     .desktop-nav {
         display: none;
     }
 
-    /* 2. Mostra e posiciona o botão hambúrguer */
     .menu-toggle {
         display: flex;
         flex-direction: column;
-        cursor: pointer;
-        background: none;
-        border: none;
         gap: 5px;
     }
 
@@ -310,36 +309,31 @@ footer {
         transition: 0.3s;
     }
 
-    /* 3. Estiliza e posiciona a navegação mobile (o dropdown) */
-.mobile-nav {
+    /* Estilo Full Screen Overlay */
+    .mobile-nav {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center; /* Links no meio da tela */
         position: fixed;
-        top: 80px;
+        top: 0; /* Começa do topo zero */
         left: 0;
         width: 100%;
-        padding: 20px 0;
+        height: 100vh; /* Altura total */
         z-index: 999;
-
-        /* Ajustado para igualar ao header */
-        background: rgba(0, 0, 0, 0.3); 
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
         
-        /* border-bottom removido daqui */
-
+        background: rgba(0, 0, 0, 0.4); 
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        
         opacity: 0;
-        transform: translateY(-20px);
         visibility: hidden;
         pointer-events: none;
-        transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+        transition: opacity 0.4s ease, visibility 0.4s;
     }
 
-    /* Classe .active controla a visibilidade do dropdown */
     .mobile-nav.active {
         opacity: 1;
-        transform: translateY(0);
         visibility: visible;
         pointer-events: auto;
     }
@@ -347,12 +341,14 @@ footer {
     .mobile-nav a {
         color: white;
         text-decoration: none;
-        font-size: 18px;
+        font-size: 24px; /* Maior para mobile */
         font-weight: 700;
-        margin: 15px 0;
+        margin: 20px 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
     }
 
-    /* Animação do botão para "X" */
+    /* Botão X */
     .menu-toggle.active .bar:nth-child(2) {
         opacity: 0;
     }
