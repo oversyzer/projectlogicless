@@ -69,7 +69,7 @@ function initSlider(card) {
 
 async function fetchRobloxData() {
     try {
-        // 1. Detalhes (Nome, Visitas e o GENRE_L1 que você encontrou)
+        // 1. Detalhes (Nome, Visitas e o Gênero Correto via genre_l1)
         const detailsRes = await fetch(`${proxy}https://games.roblox.com/v1/games?universeIds=${universeIds.join(',')}`);
         const detailsData = await detailsRes.json();
 
@@ -81,13 +81,10 @@ async function fetchRobloxData() {
             const card = document.getElementById(`game-${game.id}`);
             if (!card) continue;
 
-            // Atualiza Nome, Visitas e o Gênero Correto (genre_l1)
+            // Atualiza Texto: Nome, Visitas e o gênero_l1 (Social, etc)
             card.querySelector('.game-name').innerText = game.name;
             card.querySelector('.game-visits').innerText = `👁️ ${formatNumbers(game.visits)} Visits`;
-            
-            // Exibe o gênero_l1. Se estiver vazio, usa o gênero padrão.
-            const genreDisplay = game.genre_l1 || game.genre || "Experience";
-            card.querySelector('.tag-badge').innerText = genreDisplay;
+            card.querySelector('.tag-badge').innerText = game.genre_l1 || game.genre || "Experience";
 
             // Atualiza Aprovação
             const voteInfo = votesData.data.find(v => v.id === game.id);
@@ -97,30 +94,39 @@ async function fetchRobloxData() {
                 card.querySelector('.game-approval').innerText = `👍 ${percent}% Approval`;
             }
 
-            // 3. Busca de Banners (Ajustado para usar a API de Thumbnails correta)
+            // 3. Lógica do seu Tutorial: Banners via CDN
             const mediaRes = await fetch(`${proxy}https://games.roblox.com/v2/games/${game.id}/media?fetchAllExperienceRelatedMedia=true`);
             const mediaData = await mediaRes.json();
             const container = card.querySelector('.banner-container');
-            container.innerHTML = ''; // Limpa o estado de loading
+            container.innerHTML = ''; // Limpa o "Loading..."
 
             if (mediaData.data && mediaData.data.length > 0) {
-                const images = mediaData.data.filter(item => item.assetTypeId === 1);
-                
-                // Para garantir que as imagens carreguem, usamos o endpoint de batch da Thumbnails API
-                const assetIds = images.map(img => img.imageId).join(',');
-                const thumbRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/assets?assetIds=${assetIds}&size=768x432&format=Png&isCircular=false`);
-                const thumbData = await thumbRes.json();
+                // Filtra apenas imagens (assetTypeId: 1) conforme seu passo 1
+                const imageIds = mediaData.data
+                    .filter(item => item.assetTypeId === 1)
+                    .map(item => item.imageId);
 
-                thumbData.data.forEach((thumb, idx) => {
-                    const slide = document.createElement('div');
-                    slide.className = `banner-slide ${idx === 0 ? 'active' : ''}`;
-                    slide.style.backgroundImage = `url('${thumb.imageUrl}')`;
-                    container.appendChild(slide);
-                });
-                
-                if (images.length > 0) initSlider(card);
+                if (imageIds.length > 0) {
+                    // Passo 2: Converte os IDs em URLs reais (usando 420x420 como você sugeriu)
+                    const assetIdsParam = imageIds.join(',');
+                    const thumbRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdsParam}&size=420x420&format=Png`);
+                    const thumbData = await thumbRes.json();
+
+                    // Passo 3: Insere os links diretos (imageUrl) no site
+                    thumbData.data.forEach((thumb, idx) => {
+                        if (thumb.imageUrl) {
+                            const slide = document.createElement('div');
+                            slide.className = `banner-slide ${idx === 0 ? 'active' : ''}`;
+                            slide.style.backgroundImage = `url('${thumb.imageUrl}')`;
+                            container.appendChild(slide);
+                        }
+                    });
+
+                    // Inicializa o slider se houver mais de uma imagem
+                    if (imageIds.length > 1) initSlider(card);
+                }
             } else {
-                // Fallback para o ícone caso não existam banners configurados
+                // Fallback de segurança: Ícone se não houver banners
                 const iconRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/games/icons?universeIds=${game.id}&size=512x512&format=Png&isCircular=false`);
                 const iconData = await iconRes.json();
                 const iconInfo = iconData.data.find(i => i.targetId === game.id);
@@ -133,8 +139,7 @@ async function fetchRobloxData() {
             }
         }
     } catch (e) { 
-        console.error("Erro Roblox:", e); 
+        console.error("Erro na integração Roblox:", e); 
     }
 }
-
 document.addEventListener('DOMContentLoaded', fetchRobloxData);
