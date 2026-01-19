@@ -69,7 +69,7 @@ function initSlider(card) {
 
 async function fetchRobloxData() {
     try {
-        // 1. Detalhes Básicos (Visitas, Nome e RootPlaceId para buscar o gênero)
+        // 1. Detalhes (Nome, Visitas e o GENRE_L1 que você encontrou)
         const detailsRes = await fetch(`${proxy}https://games.roblox.com/v1/games?universeIds=${universeIds.join(',')}`);
         const detailsData = await detailsRes.json();
 
@@ -81,16 +81,13 @@ async function fetchRobloxData() {
             const card = document.getElementById(`game-${game.id}`);
             if (!card) continue;
 
-            // Atualiza Nome e Visitas
+            // Atualiza Nome, Visitas e o Gênero Correto (genre_l1)
             card.querySelector('.game-name').innerText = game.name;
             card.querySelector('.game-visits').innerText = `👁️ ${formatNumbers(game.visits)} Visits`;
-
-            // Busca Gênero Real via Place Details (usando o rootPlaceId)
-            const placeRes = await fetch(`${proxy}https://games.roblox.com/v1/games/multiget-place-details?placeIds=${game.rootPlaceId}`);
-            const placeData = await placeRes.json();
-            if (placeData && placeData[0]) {
-                card.querySelector('.tag-badge').innerText = placeData[0].genre;
-            }
+            
+            // Exibe o gênero_l1. Se estiver vazio, usa o gênero padrão.
+            const genreDisplay = game.genre_l1 || game.genre || "Experience";
+            card.querySelector('.tag-badge').innerText = genreDisplay;
 
             // Atualiza Aprovação
             const voteInfo = votesData.data.find(v => v.id === game.id);
@@ -100,39 +97,43 @@ async function fetchRobloxData() {
                 card.querySelector('.game-approval').innerText = `👍 ${percent}% Approval`;
             }
 
-            // 3. Busca Banners usando a API v2 que você encontrou
+            // 3. Busca de Banners (Ajustado para usar a API de Thumbnails correta)
             const mediaRes = await fetch(`${proxy}https://games.roblox.com/v2/games/${game.id}/media?fetchAllExperienceRelatedMedia=true`);
             const mediaData = await mediaRes.json();
             const container = card.querySelector('.banner-container');
-            container.innerHTML = ''; // Limpa o "Loading"
+            container.innerHTML = ''; // Limpa o estado de loading
 
             if (mediaData.data && mediaData.data.length > 0) {
-                // Filtra apenas o que é imagem (assetTypeId 1)
                 const images = mediaData.data.filter(item => item.assetTypeId === 1);
                 
-                images.forEach((img, idx) => {
+                // Para garantir que as imagens carreguem, usamos o endpoint de batch da Thumbnails API
+                const assetIds = images.map(img => img.imageId).join(',');
+                const thumbRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/assets?assetIds=${assetIds}&size=768x432&format=Png&isCircular=false`);
+                const thumbData = await thumbRes.json();
+
+                thumbData.data.forEach((thumb, idx) => {
                     const slide = document.createElement('div');
                     slide.className = `banner-slide ${idx === 0 ? 'active' : ''}`;
-                    // Usamos o CDN de assets para transformar o imageId em uma URL de imagem real
-                    const imgUrl = `https://assetgame.roblox.com/Game/Tools/ThumbnailAsset.ashx?aid=${img.imageId}&fmt=png&wd=768&ht=432`;
-                    slide.style.backgroundImage = `url('${imgUrl}')`;
+                    slide.style.backgroundImage = `url('${thumb.imageUrl}')`;
                     container.appendChild(slide);
                 });
-                initSlider(card);
+                
+                if (images.length > 0) initSlider(card);
             } else {
-                // Fallback: Se não tiver banners, tenta o ícone
+                // Fallback para o ícone caso não existam banners configurados
                 const iconRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/games/icons?universeIds=${game.id}&size=512x512&format=Png&isCircular=false`);
                 const iconData = await iconRes.json();
-                if (iconData.data && iconData.data[0]) {
+                const iconInfo = iconData.data.find(i => i.targetId === game.id);
+                if (iconInfo) {
                     const slide = document.createElement('div');
                     slide.className = 'banner-slide active';
-                    slide.style.backgroundImage = `url('${iconData.data[0].imageUrl}')`;
+                    slide.style.backgroundImage = `url('${iconInfo.imageUrl}')`;
                     container.appendChild(slide);
                 }
             }
         }
     } catch (e) { 
-        console.error("Erro ao carregar dados do Roblox:", e); 
+        console.error("Erro Roblox:", e); 
     }
 }
 
