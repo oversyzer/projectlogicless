@@ -12,22 +12,24 @@ const observer = new IntersectionObserver((entries) => {
 const hiddenElements = document.querySelectorAll('.hidden');
 hiddenElements.forEach((el) => observer.observe(el));
 
-// --- Lógica do Menu Mobile ---
+// --- Lógica do Menu Mobile Atualizada ---
 const mobileMenu = document.getElementById('mobile-menu');
-const navMenu = document.getElementById('nav-menu'); // Este é o ID da <nav> mobile
+const navMenu = document.getElementById('nav-menu');
 
-// Verifica se os elementos existem antes de adicionar o evento
 if (mobileMenu && navMenu) {
     mobileMenu.addEventListener('click', () => {
         mobileMenu.classList.toggle('active');
-        navMenu.classList.toggle('active'); // Adiciona/remove .active da <nav> mobile
+        navMenu.classList.toggle('active');
+        // Adiciona/remove classe no body para unificar o blur
+        document.body.classList.toggle('menu-open');
     });
 
-    // Fecha o menu ao clicar em qualquer link DENTRO do menu mobile
+    // Fecha o menu ao clicar em qualquer link
     document.querySelectorAll('#nav-menu a').forEach(link => {
         link.addEventListener('click', () => {
             mobileMenu.classList.remove('active');
             navMenu.classList.remove('active');
+            document.body.classList.remove('menu-open');
         });
     });
 }
