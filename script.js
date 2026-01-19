@@ -57,17 +57,14 @@ function initSlider(card) {
         slides[currentIndex].classList.add('active');
     }
 
-    // Apenas transição automática, botões removidos.
     setInterval(() => showSlide(currentIndex + 1), 5000);
 }
 
 async function fetchRobloxData() {
     try {
-        // 1. Detalhes (Nome, Visitas e o Gênero Correto via genre_l1)
         const detailsRes = await fetch(`${proxy}https://games.roblox.com/v1/games?universeIds=${universeIds.join(',')}`);
         const detailsData = await detailsRes.json();
 
-        // 2. Votos
         const votesRes = await fetch(`${proxy}https://games.roblox.com/v1/games/votes?universeIds=${universeIds.join(',')}`);
         const votesData = await votesRes.json();
 
@@ -75,12 +72,10 @@ async function fetchRobloxData() {
             const card = document.getElementById(`game-${game.id}`);
             if (!card) continue;
 
-            // Atualiza Texto: Nome, Visitas e o gênero_l1 (Social, etc)
             card.querySelector('.game-name').innerText = game.name;
             card.querySelector('.game-visits').innerText = `👁️ ${formatNumbers(game.visits)} Visits`;
             card.querySelector('.tag-badge').innerText = game.genre_l1 || game.genre || "Experience";
 
-            // Atualiza Aprovação
             const voteInfo = votesData.data.find(v => v.id === game.id);
             if (voteInfo) {
                 const total = voteInfo.upVotes + voteInfo.downVotes;
@@ -88,25 +83,21 @@ async function fetchRobloxData() {
                 card.querySelector('.game-approval').innerText = `👍 ${percent}% Approval`;
             }
 
-            // 3. Lógica do seu Tutorial: Banners via CDN
             const mediaRes = await fetch(`${proxy}https://games.roblox.com/v1/games/${game.id}/media?fetchAllExperienceRelatedMedia=true`);
             const mediaData = await mediaRes.json();
             const container = card.querySelector('.banner-container');
-            container.innerHTML = ''; // Limpa o "Loading..."
+            container.innerHTML = '';
 
             if (mediaData.data && mediaData.data.length > 0) {
-                // Filtra apenas imagens (assetTypeId: 1) conforme seu passo 1
                 const imageIds = mediaData.data
                     .filter(item => item.assetTypeId === 1)
                     .map(item => item.imageId);
 
                 if (imageIds.length > 0) {
-                    // Passo 2: Converte os IDs em URLs reais (usando 420x420 como você sugeriu)
                     const assetIdsParam = imageIds.join(',');
                     const thumbRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdsParam}&size=420x420&format=Png`);
                     const thumbData = await thumbRes.json();
 
-                    // Passo 3: Insere os links diretos (imageUrl) no site
                     thumbData.data.forEach((thumb, idx) => {
                         if (thumb.imageUrl) {
                             const slide = document.createElement('div');
@@ -116,11 +107,9 @@ async function fetchRobloxData() {
                         }
                     });
 
-                    // Inicializa o slider se houver mais de uma imagem
                     if (imageIds.length > 1) initSlider(card);
                 }
             } else {
-                // Fallback de segurança: Ícone se não houver banners
                 const iconRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/games/icons?universeIds=${game.id}&size=512x512&format=Png&isCircular=false`);
                 const iconData = await iconRes.json();
                 const iconInfo = iconData.data.find(i => i.targetId === game.id);
@@ -138,10 +127,11 @@ async function fetchRobloxData() {
 }
 document.addEventListener('DOMContentLoaded', fetchRobloxData);
 
-// --- Lógica de Foco Automático no Scroll (Mobile) ---
+// --- Lógica de Foco Automático no Centro da Tela (Mobile) ---
 const mobileFocusObserver = new IntersectionObserver((entries) => {
     if (window.innerWidth <= 768) {
         entries.forEach((entry) => {
+            // entry.isIntersecting com rootMargin garante que só o que está no "meio" ativa
             if (entry.isIntersecting) {
                 entry.target.classList.add('mobile-focus');
             } else {
@@ -150,7 +140,9 @@ const mobileFocusObserver = new IntersectionObserver((entries) => {
         });
     }
 }, {
-    threshold: 0.8 // Ativa quando 80% do card está na tela
+    // rootMargin de -40% no topo e base cria uma "zona de detecção" de 20% no centro da tela
+    rootMargin: "-40% 0px -40% 0px",
+    threshold: 0
 });
 
 document.querySelectorAll('.game-card').forEach((card) => {
