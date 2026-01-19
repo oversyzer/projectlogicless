@@ -18,19 +18,18 @@ body {
    HEADER
    ========================================= */
 header {
-    position: fixed;
+position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 80px;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.3); /* Mantido 30% */
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    border-bottom: 1px solid rgba(0, 255, 204, 0.3);
 }
 
 .header-content {
@@ -312,7 +311,7 @@ footer {
     }
 
     /* 3. Estiliza e posiciona a navegação mobile (o dropdown) */
-    .mobile-nav {
+.mobile-nav {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -323,14 +322,13 @@ footer {
         padding: 20px 0;
         z-index: 999;
 
-        /* BLUR FUNCIONANDO */
-        background: rgba(0, 0, 0, 0.5);
+        /* Ajustado para igualar ao header */
+        background: rgba(0, 0, 0, 0.3); 
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         
-        border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+        /* border-bottom removido daqui */
 
-        /* Animação */
         opacity: 0;
         transform: translateY(-20px);
         visibility: hidden;
