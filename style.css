@@ -67,7 +67,7 @@ header {
 
 .brand-text span {
     font-weight: 800;
-    font-size: 20px; /* Ajustado para linha única */
+    font-size: 20px;
     letter-spacing: 2px;
     text-transform: uppercase;
 }
@@ -122,6 +122,13 @@ section {
     margin: auto;
 }
 
+.section-title {
+    font-size: 55px; /* Aumentado conforme solicitado */
+    font-weight: 800;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+}
+
 .who-we-are {
     background: linear-gradient(to bottom, #0a0a0a, #000);
 }
@@ -135,9 +142,9 @@ section {
 .who-we-are p {
     color: #ccc;
     line-height: 1.8;
-    font-size: 16px;
-    max-width: 850px;
-    margin: 0 auto 20px;
+    font-size: 17px;
+    max-width: 900px;
+    margin: 0 auto 25px;
 }
 
 .highlight {
@@ -145,29 +152,12 @@ section {
     font-weight: bold;
 }
 
-.stats-grid {
-    margin: 40px 0;
-}
-
-.stats-number {
-    color: #00FFCC;
-    font-size: 32px;
-    font-weight: 800;
-    margin: 0;
-}
-
-.stats-label {
-    font-size: 18px;
-    color: white;
-    margin-bottom: 20px;
-}
-
 .games-grid {
     display: flex;
     justify-content: center;
     gap: 25px;
     flex-wrap: wrap;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 .game-card {
@@ -253,17 +243,19 @@ footer {
 .social-icons {
     display: flex;
     gap: 20px;
+    align-items: center;
 }
 
-.social-icons a {
-    color: white;
-    text-decoration: none;
-    font-size: 24px;
+.social-img {
+    height: 30px; /* Tamanho ajustado dos ícones */
+    width: auto;
+    filter: brightness(0) invert(1); /* Deixa os ícones brancos */
     transition: 0.3s;
 }
 
-.social-icons a:hover {
-    color: #00FFCC;
+.social-img:hover {
+    filter: none; /* Volta a cor original ao passar o mouse */
+    transform: scale(1.1);
 }
 
 /* =========================================
@@ -292,7 +284,6 @@ footer {
         -webkit-backdrop-filter: none;
     }
 
-    /* Esconde apenas o texto no mobile para dar espaço ao logo */
     .brand-text {
         display: none;
     }
@@ -350,19 +341,22 @@ footer {
         letter-spacing: 2px;
     }
 
-    /* AJUSTE DO RODAPÉ MOBILE */
     .footer-content {
-        flex-direction: column; /* Empilha itens */
+        flex-direction: column;
         gap: 20px;
         text-align: center;
     }
 
     .social-icons {
-        order: 1; /* Ícones em cima */
+        order: 1;
     }
 
     .copyright {
-        order: 2; /* Texto embaixo */
+        order: 2;
+    }
+
+    .section-title {
+        font-size: 38px; /* Ajuste para o título não quebrar no mobile */
     }
 
     /* Botão X */
