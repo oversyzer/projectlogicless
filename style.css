@@ -86,7 +86,7 @@ header {
 }
 
 .desktop-nav a:hover {
-    color: #00FFCC;
+    color: #ffffff; /* Alterado para Branco */
 }
 
 .mobile-nav {
@@ -148,7 +148,7 @@ section {
 }
 
 .highlight {
-    color: #00FFCC;
+    color: #ffffff; /* Alterado para Branco */
     font-weight: bold;
 }
 
@@ -174,10 +174,11 @@ section {
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 
-.game-card:hover {
+/* Hover unificado para Desktop e Mobile (via JS) */
+.game-card:hover, .game-card.mobile-focus {
     transform: translateY(-10px) scale(1.02);
-    border-color: #00FFCC;
-    box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
+    border-color: #ffffff; /* Alterado para Branco */
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2); /* Alterado para Branco */
 }
 
 .game-thumb {
@@ -211,27 +212,8 @@ section {
 }
 
 .slider-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 15;
-    font-weight: bold;
-    transition: 0.3s;
-    border-radius: 5px;
+    display: none; /* Botões removidos conforme solicitado */
 }
-
-.slider-btn:hover {
-    background: #00FFCC;
-    color: black;
-}
-
-.prev-btn { left: 5px; }
-.next-btn { right: 5px; }
 
 .game-info {
     padding: 20px;
@@ -254,7 +236,7 @@ section {
     position: absolute;
     top: 0;
     right: 20px;
-    background: #00FFCC;
+    background: #ffffff; /* Alterado para Branco */
     color: black;
     padding: 5px 15px;
     border-radius: 0 0 5px 5px;
@@ -269,7 +251,7 @@ section {
 footer {
     background: #000;
     padding: 60px 0;
-    border-top: 1px solid #00FFCC;
+    border-top: 1px solid #ffffff; /* Alterado para Branco */
     display: flex;
     justify-content: center;
 }
