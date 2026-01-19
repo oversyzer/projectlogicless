@@ -74,7 +74,10 @@ async function fetchRobloxData() {
 
             card.querySelector('.game-name').innerText = game.name;
             card.querySelector('.game-visits').innerText = `👁️ ${formatNumbers(game.visits)} Visits`;
-            card.querySelector('.tag-badge').innerText = game.genre_l1 || game.genre || "Experience";
+            
+            // Transformando o gênero em MAIÚSCULAS
+            const genreText = game.genre_l1 || game.genre || "Experience";
+            card.querySelector('.tag-badge').innerText = genreText.toUpperCase();
 
             const voteInfo = votesData.data.find(v => v.id === game.id);
             if (voteInfo) {
@@ -131,7 +134,6 @@ document.addEventListener('DOMContentLoaded', fetchRobloxData);
 const mobileFocusObserver = new IntersectionObserver((entries) => {
     if (window.innerWidth <= 768) {
         entries.forEach((entry) => {
-            // entry.isIntersecting com rootMargin garante que só o que está no "meio" ativa
             if (entry.isIntersecting) {
                 entry.target.classList.add('mobile-focus');
             } else {
@@ -140,11 +142,28 @@ const mobileFocusObserver = new IntersectionObserver((entries) => {
         });
     }
 }, {
-    // rootMargin de -40% no topo e base cria uma "zona de detecção" de 20% no centro da tela
     rootMargin: "-40% 0px -40% 0px",
     threshold: 0
 });
 
 document.querySelectorAll('.game-card').forEach((card) => {
     mobileFocusObserver.observe(card);
+});
+
+// --- Proteção Contra Inspeção e Cópia ---
+
+// Bloquear clique direito
+document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+});
+
+// Bloquear atalhos de teclado (F12, Ctrl+Shift+I, Ctrl+U, etc)
+document.addEventListener('keydown', (e) => {
+    if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+        (e.ctrlKey && e.key === 'u')
+    ) {
+        e.preventDefault();
+    }
 });
