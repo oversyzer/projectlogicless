@@ -69,29 +69,26 @@ function initSlider(card) {
 
 async function fetchRobloxData() {
     try {
-        // 1. Detalhes (Visitas, Nome)
+        // 1. Busca Detalhes Principais dos Universos
         const detailsRes = await fetch(`${proxy}https://games.roblox.com/v1/games?universeIds=${universeIds.join(',')}`);
         const detailsData = await detailsRes.json();
 
-        // 2. Votos
+        // 2. Busca Votos
         const votesRes = await fetch(`${proxy}https://games.roblox.com/v1/games/votes?universeIds=${universeIds.join(',')}`);
         const votesData = await votesRes.json();
-
-        // 3. Ícones (Caso não tenha banners)
-        const iconRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeIds.join(',')}&size=512x512&format=Png&isCircular=false`);
-        const iconData = await iconRes.json();
 
         for (const game of detailsData.data) {
             const card = document.getElementById(`game-${game.id}`);
             if (!card) continue;
 
-            // Busca Gênero Específico (API de Places)
-            const placeRes = await fetch(`${proxy}https://games.roblox.com/v1/games/multiget-playability-status?universeIds=${game.id}`);
-            // Nota: O gênero agora é buscado via metadados específicos para ser 100% preciso
+            // Atualiza Título e Visitas
             card.querySelector('.game-name').innerText = game.name;
             card.querySelector('.game-visits').innerText = `👁️ ${formatNumbers(game.visits)} Visits`;
+            
+            // Gênero correto
             card.querySelector('.tag-badge').innerText = game.genre || "Experience";
 
+            // Votos
             const voteInfo = votesData.data.find(v => v.id === game.id);
             if (voteInfo) {
                 const total = voteInfo.upVotes + voteInfo.downVotes;
@@ -99,13 +96,17 @@ async function fetchRobloxData() {
                 card.querySelector('.game-approval').innerText = `👍 ${percent}% Approval`;
             }
 
-            // Busca Banners
-            const bannerRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/games/multiverse/thumbnails?universeIds=${game.id}&size=768x432&format=Png&isCircular=false`);
+            // 3. Busca Banners da Galeria (Usando o Place ID principal do jogo)
+            // A API de thumbnails de galeria funciona melhor com o PlaceID
+            const placeId = game.rootPlaceId;
+            const bannerRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/games/${placeId}/thumbnails?size=768x432&format=Png&isCircular=false`);
             const bannerData = await bannerRes.json();
+            
             const container = card.querySelector('.banner-container');
+            container.innerHTML = ''; // Limpa o "Loading"
 
-            if (bannerData.data && bannerData.data[0].thumbnails.length > 0) {
-                bannerData.data[0].thumbnails.forEach((thumb, idx) => {
+            if (bannerData.data && bannerData.data.length > 0) {
+                bannerData.data.forEach((thumb, idx) => {
                     const slide = document.createElement('div');
                     slide.className = `banner-slide ${idx === 0 ? 'active' : ''}`;
                     slide.style.backgroundImage = `url('${thumb.imageUrl}')`;
@@ -113,17 +114,20 @@ async function fetchRobloxData() {
                 });
                 initSlider(card);
             } else {
-                // Fallback para Ícone se não houver banner
-                const iconInfo = iconData.data.find(i => i.targetId === game.id);
-                if (iconInfo) {
+                // Fallback para o ícone caso o jogo não tenha galeria configurada
+                const iconRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/games/icons?universeIds=${game.id}&size=512x512&format=Png&isCircular=false`);
+                const iconData = await iconRes.json();
+                if (iconData.data && iconData.data[0]) {
                     const slide = document.createElement('div');
                     slide.className = 'banner-slide active';
-                    slide.style.backgroundImage = `url('${iconInfo.imageUrl}')`;
+                    slide.style.backgroundImage = `url('${iconData.data[0].imageUrl}')`;
                     container.appendChild(slide);
                 }
             }
         }
-    } catch (e) { console.error("Erro Roblox:", e); }
+    } catch (error) {
+        console.error("Erro ao carregar dados do Roblox:", error);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', fetchRobloxData);
