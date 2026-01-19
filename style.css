@@ -12,6 +12,18 @@ body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    
+    /* Proteção contra cópia: Desativa seleção de texto */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
+    user-select: none;         /* Padrão */
+}
+
+/* Proteção contra arrastar imagens */
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
 }
 
 body.menu-open {
@@ -243,6 +255,7 @@ section {
     font-weight: bold;
     font-size: 12px;
     z-index: 20;
+    text-transform: uppercase; /* Força maiúsculo via CSS também como redundância */
 }
 
 /* =========================================
