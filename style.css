@@ -227,20 +227,20 @@ footer {
 
     /* Mostra o botão hambúrguer */
     .menu-toggle {
-        display: block;
+        display: flex;
         z-index: 1001; /* Garante que fique acima do menu */
     }
 
     /* MUDANÇA PRINCIPAL: LÓGICA DO DROPDOWN */
     nav {
         /* 1. MANTEMOS O ELEMENTO SEMPRE PRESENTE, MAS INVISÍVEL */
-        display: block; /* Agora é sempre flex, não muda mais */
+        display: flex; /* Agora é sempre flex, não muda mais */
         flex-direction: column;
         position: absolute;
         top: 80px;
         left: 0;
         width: 100%;
-        text-align: right;
+        text-align: center;
         padding: 20px 0;
         
         /* 2. O FUNDO E O BLUR SÃO APLICADOS PERMANENTEMENTE */
