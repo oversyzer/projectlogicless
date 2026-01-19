@@ -1,3 +1,6 @@
+// --- CONFIGURAÇÃO DE DEBUG ---
+const DEBUG_MODE = true; // Altere para false para ativar a proteção novamente
+
 // --- Lógica do Intersection Observer (Animações de Scroll) ---
 const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -35,7 +38,8 @@ if (mobileMenu && navMenu) {
 // --- Integração com a API do Roblox ---
 
 const universeIds = ["996458434", "6713567019", "8949221887"];
-const proxy = "https://corsproxy.io/?";
+// Adicionando um timestamp ao proxy para evitar cache viciado
+const proxy = "https://corsproxy.io/?cache=" + new Date().getTime() + "&url=";
 
 function formatNumbers(num) {
     if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
@@ -62,10 +66,10 @@ function initSlider(card) {
 
 async function fetchRobloxData() {
     try {
-        const detailsRes = await fetch(`${proxy}https://games.roblox.com/v1/games?universeIds=${universeIds.join(',')}`);
+        const detailsRes = await fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games?universeIds=' + universeIds.join(','))}`);
         const detailsData = await detailsRes.json();
 
-        const votesRes = await fetch(`${proxy}https://games.roblox.com/v1/games/votes?universeIds=${universeIds.join(',')}`);
+        const votesRes = await fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games/votes?universeIds=' + universeIds.join(','))}`);
         const votesData = await votesRes.json();
 
         for (const game of detailsData.data) {
@@ -75,7 +79,6 @@ async function fetchRobloxData() {
             card.querySelector('.game-name').innerText = game.name;
             card.querySelector('.game-visits').innerText = `👁️ ${formatNumbers(game.visits)} Visits`;
             
-            // Transformando o gênero em MAIÚSCULAS
             const genreText = game.genre_l1 || game.genre || "Experience";
             card.querySelector('.tag-badge').innerText = genreText.toUpperCase();
 
@@ -86,7 +89,7 @@ async function fetchRobloxData() {
                 card.querySelector('.game-approval').innerText = `👍 ${percent}% Approval`;
             }
 
-            const mediaRes = await fetch(`${proxy}https://games.roblox.com/v1/games/${game.id}/media?fetchAllExperienceRelatedMedia=true`);
+            const mediaRes = await fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games/' + game.id + '/media?fetchAllExperienceRelatedMedia=true')}`);
             const mediaData = await mediaRes.json();
             const container = card.querySelector('.banner-container');
             container.innerHTML = '';
@@ -98,7 +101,7 @@ async function fetchRobloxData() {
 
                 if (imageIds.length > 0) {
                     const assetIdsParam = imageIds.join(',');
-                    const thumbRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdsParam}&size=420x420&format=Png`);
+                    const thumbRes = await fetch(`${proxy}${encodeURIComponent('https://thumbnails.roblox.com/v1/assets?assetIds=' + assetIdsParam + '&size=420x420&format=Png')}`);
                     const thumbData = await thumbRes.json();
 
                     thumbData.data.forEach((thumb, idx) => {
@@ -113,7 +116,7 @@ async function fetchRobloxData() {
                     if (imageIds.length > 1) initSlider(card);
                 }
             } else {
-                const iconRes = await fetch(`${proxy}https://thumbnails.roblox.com/v1/games/icons?universeIds=${game.id}&size=512x512&format=Png&isCircular=false`);
+                const iconRes = await fetch(`${proxy}${encodeURIComponent('https://thumbnails.roblox.com/v1/games/icons?universeIds=' + game.id + '&size=512x512&format=Png&isCircular=false')}`);
                 const iconData = await iconRes.json();
                 const iconInfo = iconData.data.find(i => i.targetId === game.id);
                 if (iconInfo) {
@@ -152,18 +155,20 @@ document.querySelectorAll('.game-card').forEach((card) => {
 
 // --- Proteção Contra Inspeção e Cópia ---
 
-// Bloquear clique direito
-document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-});
-
-// Bloquear atalhos de teclado (F12, Ctrl+Shift+I, Ctrl+U, etc)
-document.addEventListener('keydown', (e) => {
-    if (
-        e.key === 'F12' ||
-        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
-        (e.ctrlKey && e.key === 'u')
-    ) {
+if (!DEBUG_MODE) {
+    // Bloquear clique direito
+    document.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-    }
-});
+    });
+
+    // Bloquear atalhos de teclado
+    document.addEventListener('keydown', (e) => {
+        if (
+            e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+            (e.ctrlKey && e.key === 'u')
+        ) {
+            e.preventDefault();
+        }
+    });
+}
