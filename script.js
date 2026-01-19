@@ -20,11 +20,9 @@ if (mobileMenu && navMenu) {
     mobileMenu.addEventListener('click', () => {
         mobileMenu.classList.toggle('active');
         navMenu.classList.toggle('active');
-        // Adiciona/remove classe no body para unificar o blur
         document.body.classList.toggle('menu-open');
     });
 
-    // Fecha o menu ao clicar em qualquer link
     document.querySelectorAll('#nav-menu a').forEach(link => {
         link.addEventListener('click', () => {
             mobileMenu.classList.remove('active');
