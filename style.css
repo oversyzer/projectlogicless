@@ -46,6 +46,9 @@ header {
     display: flex;
     align-items: center;
     gap: 12px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
 }
 
 .brand-logo-img {
@@ -56,6 +59,7 @@ header {
 .brand-text {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     line-height: 0.9;
 }
 
@@ -67,19 +71,11 @@ header {
 }
 
 /* =========================================
-   NAVEGAÇÃO (DESKTOP)
+   NAVEGAÇÃO
    ========================================= */
-nav {
-    position: fixed;
-    top: 0;
-    right: 40px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    z-index: 1001;
-}
 
-nav a {
+/* NAVEGAÇÃO DESKTOP (VISÍVEL POR PADRÃO) */
+.desktop-nav a {
     color: white;
     text-decoration: none;
     margin-left: 30px;
@@ -89,11 +85,16 @@ nav a {
     transition: 0.3s;
 }
 
-nav a:hover {
+.desktop-nav a:hover {
     color: #00FFCC;
 }
 
-/* Escondido por padrão, aparece no mobile */
+/* NAVEGAÇÃO MOBILE (ESCONDIDA POR PADRÃO) */
+.mobile-nav {
+    display: none;
+}
+
+/* BOTÃO HAMBÚRGUER (ESCONDIDO POR PADRÃO) */
 .menu-toggle {
     display: none;
     z-index: 1002;
@@ -284,14 +285,16 @@ footer {
    MEDIA QUERIES (MOBILE)
    ========================================= */
 @media (max-width: 768px) {
-    .header-content {
-        justify-content: flex-start;
-    }
-
     .brand-text {
         display: none;
     }
 
+    /* 1. Esconde a navegação do desktop */
+    .desktop-nav {
+        display: none;
+    }
+
+    /* 2. Mostra e posiciona o botão hambúrguer */
     .menu-toggle {
         display: flex;
         flex-direction: column;
@@ -299,9 +302,6 @@ footer {
         background: none;
         border: none;
         gap: 5px;
-        position: fixed;
-        top: 25px;
-        right: 40px;
     }
 
     .menu-toggle .bar {
@@ -311,23 +311,26 @@ footer {
         transition: 0.3s;
     }
 
-    /* NAV se torna o menu dropdown */
-    nav {
+    /* 3. Estiliza e posiciona a navegação mobile (o dropdown) */
+    .mobile-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         position: fixed;
         top: 80px;
         left: 0;
-        right: auto;
         width: 100%;
-        height: auto;
         padding: 20px 0;
-        
+        z-index: 999;
+
+        /* BLUR FUNCIONANDO */
         background: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         
         border-bottom: 1px solid rgba(0, 255, 204, 0.3);
 
-        flex-direction: column;
+        /* Animação */
         opacity: 0;
         transform: translateY(-20px);
         visibility: hidden;
@@ -335,16 +338,20 @@ footer {
         transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
     }
 
-    nav.active {
+    /* Classe .active controla a visibilidade do dropdown */
+    .mobile-nav.active {
         opacity: 1;
         transform: translateY(0);
         visibility: visible;
         pointer-events: auto;
     }
 
-    nav a {
-        margin: 15px 0;
+    .mobile-nav a {
+        color: white;
+        text-decoration: none;
         font-size: 18px;
+        font-weight: 700;
+        margin: 15px 0;
     }
 
     /* Animação do botão para "X" */
