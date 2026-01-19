@@ -78,6 +78,23 @@ nav a {
 }
 nav a:hover { color: #00FFCC; }
 
+/* Botão Hamburguer (Escondido por padrão) */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    background: none;
+    border: none;
+    gap: 5px;
+}
+
+.menu-toggle .bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    transition: 0.3s;
+}
+
 /* Seções e Containers */
 section {
     padding: 120px 20px;
@@ -120,10 +137,7 @@ section {
     margin-top: 50px;
 }
 
-/* =========================================
-   ESTILO E ANIMAÇÃO DOS CARDS
-   ========================================= */
-
+/* Estilo dos Cards */
 .game-card {
     background: #111;
     width: 320px;
@@ -135,11 +149,6 @@ section {
     display: block;
     text-decoration: none;
     color: inherit;
-
-    /* AQUI ESTÁ A CORREÇÃO FINAL: */
-    /* Definimos que qualquer animação de movimento (transform), sombra e borda */
-    /* DEVE ser rápida (0.3s), não importa o que aconteça no scroll. */
-    /* O !important garante que o hover de entrar e sair seja rápido. */
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 
@@ -151,7 +160,6 @@ section {
 }
 
 .game-thumb { width: 100%; height: 180px; background: #222; background-size: cover; background-position: center; }
-
 .game-info { padding: 20px; }
 .game-info h3 { margin: 0 0 10px 0; font-weight: 700; }
 .game-info p { font-size: 14px; color: #aaa; margin: 5px 0; display: flex; align-items: center; }
@@ -190,30 +198,66 @@ footer {
 
 .social-icons a { color: white; margin-right: 15px; text-decoration: none; font-size: 18px; }
 
-/* =========================================
-   ANIMAÇÃO DE SCROLL
-   ========================================= */
-
-/* Estado oculto (antes de aparecer na tela) */
+/* Animações de Scroll */
 .hidden {
     opacity: 0;
     filter: blur(10px);
-    transform: translateY(50px); /* Posição inicial: 50px para baixo */
-    
-    /* AQUI ESTÁ O TRUQUE: */
-    /* Animamos lentamente (1s) apenas a Opacidade e o Blur. */
-    /* Removemos o 'transform' daqui, para que ele obedeça a regra rápida (0.3s) */
-    /* definida no .game-card lá em cima. Assim o hover não trava. */
+    transform: translateY(50px);
     transition: opacity 1s ease-out, filter 1s ease-out;
 }
 
-/* Estado visível (quando entra na tela) */
 .show {
     opacity: 1;
     filter: blur(0);
     transform: translateY(0);
 }
 
-/* Delays para efeito cascata nos cards */
 .games-grid .game-card:nth-child(2) { transition-delay: 150ms; }
 .games-grid .game-card:nth-child(3) { transition-delay: 300ms; }
+
+/* =========================================
+   MEDIA QUERIES (MOBILE)
+   ========================================= */
+
+@media (max-width: 768px) {
+    /* Esconde o texto da logo */
+    .brand-text {
+        display: none;
+    }
+
+    /* Mostra o botão hambúrguer */
+    .menu-toggle {
+        display: flex;
+    }
+
+    /* Estiliza o menu dropdown */
+    nav {
+        display: none; /* Escondido por padrão */
+        flex-direction: column;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+        text-align: center;
+    }
+
+    /* Mostra o menu quando ativo via JS */
+    nav.active {
+        display: flex;
+    }
+
+    nav a {
+        margin: 15px 0;
+        font-size: 16px;
+    }
+
+    /* Animação simples para o X no hambúrguer (opcional) */
+    .menu-toggle.active .bar:nth-child(2) { opacity: 0; }
+    .menu-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .menu-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+}
