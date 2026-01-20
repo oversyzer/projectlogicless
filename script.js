@@ -53,65 +53,44 @@ function formatCreationDate(isoString) {
 }
 
 async function fetchRobloxData() {
-    // 1. Extrai os IDs dinamicamente do HTML
+    // 1. Extrai os Universe IDs do HTML (isso continua igual)
     const gameCards = document.querySelectorAll('.game-card');
-    const placeIds = [];
     const universeIds = [];
-
     gameCards.forEach(card => {
-        const href = card.getAttribute('href');
-        const placeIdMatch = href.match(/games\/(\d+)/); // Extrai o número (placeId) da URL
-
-        if (placeIdMatch && placeIdMatch[1]) {
-            placeIds.push(placeIdMatch[1]);
-        }
-        
-        // Extrai o universeId do ID do card (formato: "game-UNIVERSEID")
         const universeId = card.id.replace('game-', '');
-        if (universeId) {
-            universeIds.push(universeId);
-        }
+        if (universeId) universeIds.push(universeId);
     });
 
-    if (universeIds.length === 0 || placeIds.length === 0) {
-        console.error("Nenhum ID de jogo encontrado nos cards.");
-        return;
-    }
+    if (universeIds.length === 0) return;
+
+    const idsString = universeIds.join(',');
 
     try {
-        // 2. Faz as chamadas de API
-        // Chamada NOVA para pegar 'sourceName' usando placeIds
-        const placeDetailsRes = await fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games/multiget-place-details?placeIds=' + placeIds.join(','))}`);
-        const placeDetailsData = await placeDetailsRes.json();
-
-        // Chamadas EXISTENTES para estatísticas e ícones usando universeIds
-        const detailsRes = await fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games?universeIds=' + universeIds.join(','))}`);
-        const detailsData = await detailsRes.json();
-
-        const votesRes = await fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games/votes?universeIds=' + universeIds.join(','))}`);
-        const votesData = await votesRes.json();
-
-        const iconsRes = await fetch(`${proxy}${encodeURIComponent('https://thumbnails.roblox.com/v1/games/icons?universeIds=' + universeIds.join(',') + '&size=512x512&format=Png&isCircular=false')}`);
-        const iconsData = await iconsRes.json();
+        // 2. Busca todos os dados em paralelo para máxima velocidade
+        const [
+            namesMap,       // Nomes em inglês da nossa API segura
+            detailsData,    // Visitas, data, etc da API pública
+            votesData,      // Votos da API pública
+            iconsData       // Ícones da API pública
+        ] = await Promise.all([
+            fetch(`/api/roblox-data?ids=${idsString}`).then(res => res.json()),
+            fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games?universeIds=' + idsString)}`).then(res => res.json()),
+            fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games/votes?universeIds=' + idsString)}`).then(res => res.json()),
+            fetch(`${proxy}${encodeURIComponent('https://thumbnails.roblox.com/v1/games/icons?universeIds=' + idsString + '&size=512x512&format=Png&isCircular=false')}`).then(res => res.json())
+        ]);
 
         // 3. Combina os dados e atualiza a página
         for (const game of detailsData.data) {
             const card = document.getElementById(`game-${game.id}`);
             if (!card) continue;
 
-            // Encontra os detalhes do "place" correspondentes usando o universeId
-            const placeDetail = placeDetailsData.find(pd => pd.universeId === game.id);
-            
-            // Prioriza o 'sourceName', se não existir, usa o 'name' normal
-            const displayName = placeDetail && placeDetail.sourceName ? placeDetail.sourceName : game.name;
-            card.querySelector('.game-name').innerText = displayName;
+            // Pega o nome em inglês do nosso mapa, ou usa o nome traduzido como fallback
+            const englishName = namesMap[game.id] || game.name;
+            card.querySelector('.game-name').innerText = englishName;
 
-            // O resto das informações continua igual
+            // O resto dos dados vem das APIs públicas, como antes
             card.querySelector('.game-visits .stat-text').innerText = `${formatNumbers(game.visits)} Visits`;
-            
-            const genreText = game.genre_l1 || game.genre || "Experience";
-            card.querySelector('.game-genre .stat-text').innerText = `${genreText}`;
-
+            card.querySelector('.game-genre .stat-text').innerText = `${game.genre || "Experience"}`;
             card.querySelector('.game-date .stat-text').innerText = `${formatCreationDate(game.created)}`;
 
             const voteInfo = votesData.data.find(v => v.id === game.id);
@@ -121,9 +100,8 @@ async function fetchRobloxData() {
                 card.querySelector('.game-approval .stat-text').innerText = `${percent}% Approval`;
             }
 
-            const thumbContainer = card.querySelector('.game-thumb');
             const iconInfo = iconsData.data.find(i => i.targetId === game.id);
-
+            const thumbContainer = card.querySelector('.game-thumb');
             if (iconInfo && iconInfo.imageUrl) {
                 thumbContainer.style.backgroundImage = `url('${iconInfo.imageUrl}')`;
             } else {
@@ -131,7 +109,7 @@ async function fetchRobloxData() {
             }
         }
     } catch (e) { 
-        console.error("Erro na integração Roblox:", e); 
+        console.error("Erro ao buscar e combinar os dados dos jogos:", e); 
     }
 }
 
