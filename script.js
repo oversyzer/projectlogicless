@@ -103,37 +103,7 @@ async function fetchRobloxData() {
             const iconInfo = iconsData.data.find(i => i.targetId === game.id);
             const thumbContainer = card.querySelector('.game-thumb');
             if (iconInfo && iconInfo.imageUrl) {
-                const imageUrl = iconInfo.imageUrl;
-                thumbContainer.style.backgroundImage = `url('${imageUrl}')`;
-
-                // --- NOVA LÓGICA DE EXTRAÇÃO DE COR ---
-                const colorThief = new ColorThief();
-                const img = new Image();
-                
-                // Usamos o mesmo proxy para a imagem para evitar erros de CORS no canvas
-                img.src = `${proxy}${encodeURIComponent(imageUrl)}`;
-                img.crossOrigin = 'Anonymous'; // Essencial para o ColorThief funcionar
-
-                img.onload = function() {
-                    try {
-                        // Extrai a cor principal [r, g, b]
-                        const [r, g, b] = colorThief.getColor(img);
-
-                        // Lógica para evitar cores muito escuras/sem graça
-                        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-                        if (luminance > 0.25) { // Se a cor não for muito escura
-                            // Atualiza a variável CSS no elemento do card
-                            card.style.setProperty('--hover-color-rgb', `${r}, ${g}, ${b}`);
-                        } 
-                        // Se a cor for muito escura, ele mantém o branco padrão que definimos no CSS
-
-                    } catch (e) {
-                        console.error("Erro ao processar cor da imagem:", imageUrl, e);
-                        // Mantém o branco padrão em caso de erro
-                    }
-                };
-                // --- FIM DA NOVA LÓGICA ---
-
+                thumbContainer.style.backgroundImage = `url('${iconInfo.imageUrl}')`;
             } else {
                 thumbContainer.style.backgroundColor = '#222';
             }
