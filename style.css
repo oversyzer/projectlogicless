@@ -191,7 +191,7 @@ section {
 .game-card {
     background: #111;
     width: 440px; /* Card mais largo */
-    height: 150px; /* ADICIONADO: Força a altura do card para ser igual à altura do ícone */
+    height: 150px; /* Força a altura do card para ser igual à altura do ícone */
     border-radius: 15px;
     overflow: hidden;
     border: 1px solid transparent; 
@@ -223,6 +223,7 @@ section {
     display: flex;
     flex-direction: column; /* Organiza título e stats verticalmente */
     justify-content: center;
+    min-width: 0; /* ADICIONADO: Garante que o flex item possa encolher e respeitar o overflow */
 }
 
 .game-name {
@@ -230,6 +231,11 @@ section {
     font-weight: 700;
     font-size: 20px; /* Fonte do título maior */
     color: #fff; /* Título mais branco e destacado */
+
+    /* ADICIONADO: Controle de texto que transborda */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .game-stats p {
@@ -238,6 +244,11 @@ section {
     margin: 6px 0; /* Espaçamento entre estatísticas mais justo */
     display: flex;
     align-items: center;
+    
+    /* ADICIONADO: Controle de texto que transborda (para consistência) */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Nova classe para os ícones */
