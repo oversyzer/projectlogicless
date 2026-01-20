@@ -191,12 +191,12 @@ section {
 .game-card {
     background: #111;
     width: 440px; /* Card mais largo */
+    height: 150px; /* ADICIONADO: Força a altura do card para ser igual à altura do ícone */
     border-radius: 15px;
     overflow: hidden;
     border: 1px solid transparent; 
     text-align: left;
     display: flex; 
-    /* A linha 'align-items: center;' foi removida daqui para corrigir a altura */
     text-decoration: none;
     color: inherit;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
