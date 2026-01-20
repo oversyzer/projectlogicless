@@ -37,7 +37,7 @@ if (mobileMenu && navMenu) {
 
 // --- Integração com a API do Roblox ---
 
-const universeIds = ["996458434", "6713567019", "8949221887"];
+const universeIds = ["996458434", "6713567019", "8949221887", "8348990406"];
 // Adicionando um timestamp ao proxy para evitar cache viciado
 const proxy = "https://corsproxy.io/?cache=" + new Date().getTime() + "&url=";
 
@@ -47,21 +47,10 @@ function formatNumbers(num) {
     return num;
 }
 
-function initSlider(card) {
-    const slides = card.querySelectorAll('.banner-slide');
-    
-    if (slides.length <= 1) {
-        return;
-    }
-
-    let currentIndex = 0;
-    function showSlide(index) {
-        slides.forEach(s => s.classList.remove('active'));
-        currentIndex = (index + slides.length) % slides.length;
-        slides[currentIndex].classList.add('active');
-    }
-
-    setInterval(() => showSlide(currentIndex + 1), 5000);
+function formatCreationDate(isoString) {
+    if (!isoString) return 'N/A';
+    const date = new Date(isoString);
+    return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
 }
 
 async function fetchRobloxData() {
@@ -72,65 +61,46 @@ async function fetchRobloxData() {
         const votesRes = await fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games/votes?universeIds=' + universeIds.join(','))}`);
         const votesData = await votesRes.json();
 
+        // Busca todos os ícones de uma vez para otimizar
+        const iconsRes = await fetch(`${proxy}${encodeURIComponent('https://thumbnails.roblox.com/v1/games/icons?universeIds=' + universeIds.join(',') + '&size=512x512&format=Png&isCircular=false')}`);
+        const iconsData = await iconsRes.json();
+
         for (const game of detailsData.data) {
             const card = document.getElementById(`game-${game.id}`);
             if (!card) continue;
 
+            // Preenche as informações básicas
             card.querySelector('.game-name').innerText = game.name;
-            card.querySelector('.game-visits').innerText = `👁️ ${formatNumbers(game.visits)} Visits`;
+            card.querySelector('.game-visits .stat-text').innerText = `${formatNumbers(game.visits)} Visits`;
             
             const genreText = game.genre_l1 || game.genre || "Experience";
-            card.querySelector('.tag-badge').innerText = genreText.toUpperCase();
+            card.querySelector('.game-genre .stat-text').innerText = `${genreText}`;
 
+            card.querySelector('.game-date .stat-text').innerText = `${formatCreationDate(game.created)}`;
+
+            // Preenche os votos
             const voteInfo = votesData.data.find(v => v.id === game.id);
             if (voteInfo) {
                 const total = voteInfo.upVotes + voteInfo.downVotes;
                 const percent = total > 0 ? Math.round((voteInfo.upVotes / total) * 100) : 100;
-                card.querySelector('.game-approval').innerText = `👍 ${percent}% Approval`;
+                card.querySelector('.game-approval .stat-text').innerText = `${percent}% Approval`;
             }
 
-            const mediaRes = await fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games/' + game.id + '/media?fetchAllExperienceRelatedMedia=true')}`);
-            const mediaData = await mediaRes.json();
-            const container = card.querySelector('.banner-container');
-            container.innerHTML = '';
+            // Pega o ícone do jogo e aplica como fundo
+            const thumbContainer = card.querySelector('.game-thumb');
+            const iconInfo = iconsData.data.find(i => i.targetId === game.id);
 
-            if (mediaData.data && mediaData.data.length > 0) {
-                const imageIds = mediaData.data
-                    .filter(item => item.assetTypeId === 1)
-                    .map(item => item.imageId);
-
-                if (imageIds.length > 0) {
-                    const assetIdsParam = imageIds.join(',');
-                    const thumbRes = await fetch(`${proxy}${encodeURIComponent('https://thumbnails.roblox.com/v1/assets?assetIds=' + assetIdsParam + '&size=420x420&format=Png')}`);
-                    const thumbData = await thumbRes.json();
-
-                    thumbData.data.forEach((thumb, idx) => {
-                        if (thumb.imageUrl) {
-                            const slide = document.createElement('div');
-                            slide.className = `banner-slide ${idx === 0 ? 'active' : ''}`;
-                            slide.style.backgroundImage = `url('${thumb.imageUrl}')`;
-                            container.appendChild(slide);
-                        }
-                    });
-
-                    if (imageIds.length > 1) initSlider(card);
-                }
+            if (iconInfo && iconInfo.imageUrl) {
+                thumbContainer.style.backgroundImage = `url('${iconInfo.imageUrl}')`;
             } else {
-                const iconRes = await fetch(`${proxy}${encodeURIComponent('https://thumbnails.roblox.com/v1/games/icons?universeIds=' + game.id + '&size=512x512&format=Png&isCircular=false')}`);
-                const iconData = await iconRes.json();
-                const iconInfo = iconData.data.find(i => i.targetId === game.id);
-                if (iconInfo) {
-                    const slide = document.createElement('div');
-                    slide.className = 'banner-slide active';
-                    slide.style.backgroundImage = `url('${iconInfo.imageUrl}')`;
-                    container.appendChild(slide);
-                }
+                thumbContainer.style.backgroundColor = '#222'; // Cor de fallback
             }
         }
     } catch (e) { 
         console.error("Erro na integração Roblox:", e); 
     }
 }
+
 document.addEventListener('DOMContentLoaded', fetchRobloxData);
 
 // --- Lógica de Foco Automático no Centro da Tela (Mobile) ---

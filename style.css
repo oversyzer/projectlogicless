@@ -74,7 +74,6 @@ header {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    line-height: 0.9; /* Aproxima os textos para um visual de logo unido */
 }
 
 .brand-text .main-brand {
@@ -82,16 +81,6 @@ header {
     font-weight: 800; /* Extra Bold */
     font-size: 24px;  /* Tamanho aumentado */
     letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #ffffff;
-}
-
-.brand-text .sub-brand {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400; /* Regular */
-    font-size: 14px;  /* Tamanho aumentado proporcionalmente */
-    letter-spacing: 5.5px; /* Espaçamento maior para alinhar com o texto de cima */
-    text-transform: uppercase;
     color: #ffffff;
 }
 
@@ -142,6 +131,10 @@ section {
     border-bottom: 0px solid rgba(255, 255, 255, 0.164);
 }
 
+#about {
+    border-top: none;
+}
+
 .container {
     width: 100%;
     max-width: 1100px;
@@ -185,25 +178,25 @@ section {
 }
 
 /* =========================================
-   GAMES GRID
+   GAMES GRID --- SEÇÃO MODIFICADA ---
    ========================================= */
 .games-grid {
     display: flex;
     justify-content: center;
-    gap: 25px;
+    gap: 30px; /* Aumentado o espaçamento entre os cards */
     flex-wrap: wrap;
     margin-top: 20px;
 }
 
 .game-card {
     background: #111;
-    width: 320px;
+    width: 440px; /* Card mais largo */
     border-radius: 15px;
     overflow: hidden;
     border: 1px solid transparent; 
     text-align: left;
-    position: relative;
-    display: block;
+    display: flex; 
+    align-items: center;
     text-decoration: none;
     color: inherit;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
@@ -216,65 +209,45 @@ section {
 }
 
 .game-thumb {
-    width: 100%;
-    height: 180px;
-    background: #222;
-    position: relative;
-    overflow: hidden;
+    width: 150px;  /* Imagem maior */
+    height: 150px; /* Mantém o aspecto quadrado e define a altura do card */
+    flex-shrink: 0;
+    background-color: #222;
+    background-size: cover;      /* Garante que a imagem cubra todo o espaço */
+    background-position: center; /* Centraliza a imagem */
 }
 
-.banner-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
+.game-details {
+    flex-grow: 1;
+    padding: 0 25px; /* Padding vertical removido, horizontal aumentado um pouco */
+    display: flex;
+    flex-direction: column; /* Organiza título e stats verticalmente */
+    justify-content: center;
 }
 
-.banner-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    transition: opacity 0.8s ease-in-out;
-}
-
-.banner-slide.active {
-    opacity: 1;
-}
-
-.game-info {
-    padding: 20px;
-}
-
-.game-info h3 {
-    margin: 0 0 10px 0;
+.game-name {
+    margin: 0 0 15px 0; /* Espaço entre o título e as estatísticas */
     font-weight: 700;
+    font-size: 20px; /* Fonte do título maior */
+    color: #fff; /* Título mais branco e destacado */
 }
 
-.game-info p {
+.game-stats p {
     font-size: 14px;
     color: #aaa;
-    margin: 5px 0;
+    margin: 6px 0; /* Espaçamento entre estatísticas mais justo */
     display: flex;
     align-items: center;
 }
 
-.tag-badge {
-    position: absolute;
-    top: 0;
-    right: 20px;
-    background: #ffffff;
-    color: black;
-    padding: 5px 15px;
-    border-radius: 0 0 5px 5px;
-    font-weight: bold;
-    font-size: 12px;
-    z-index: 20;
-    text-transform: uppercase;
+/* Nova classe para os ícones */
+.stat-icon {
+    color: #aaa; /* Garante a cor cinza */
+    margin-right: 8px; /* Adiciona espaço entre o ícone e o texto */
+    width: 16px; /* Define uma largura fixa para alinhar os textos */
+    text-align: center; /* Centraliza o ícone */
 }
+
 
 /* =========================================
    STAY UPDATED SECTION
@@ -396,6 +369,11 @@ footer {
         background: transparent;
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
+    }
+    
+    .game-card {
+        width: 100%; /* Ocupa a largura total no mobile */
+        max-width: 440px;
     }
 
     .brand-text {
