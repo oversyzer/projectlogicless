@@ -368,7 +368,8 @@ footer {
     opacity: 0;
     filter: blur(10px);
     transform: translateY(50px);
-    transition: opacity 1s ease-out, filter 1s ease-out;
+    transition: opacity 1s ease-out, filter 1s ease-out, transform 1s ease-out; /* Adicionei transform aqui para garantir a transição */
+    will-change: opacity, filter, transform; /* <-- ADICIONE ESTA LINHA */
 }
 
 .show {

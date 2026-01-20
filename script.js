@@ -4,10 +4,12 @@ const DEBUG_MODE = true; // Altere para false para ativar a proteção novamente
 // --- Lógica do Intersection Observer (Animações de Scroll) ---
 const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
+        // Se o elemento estiver visível...
         if (entry.isIntersecting) {
+            // ... adicione a classe para animar a entrada...
             entry.target.classList.add('show');
-        } else {
-            entry.target.classList.remove('show');
+            // ... e pare de observar este elemento para não animar de novo.
+            observer.unobserve(entry.target); 
         }
     });
 });
