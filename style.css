@@ -271,11 +271,9 @@ section {
    STAY UPDATED SECTION
    ========================================= */
 .stay-updated-section {
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('backgroundstayupdated.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    padding: 150px 20px;
+    /* As propriedades de background foram removidas */
+    background-color: #000; /* Garante o fundo preto, caso a section herde outra cor */
+    padding: 80px 20px;     /* Ajustado para seguir o padrão das outras seções */
 }
 
 .update-content {
