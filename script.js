@@ -90,7 +90,7 @@ async function fetchRobloxData() {
 
             // O resto dos dados vem das APIs públicas, como antes
             card.querySelector('.game-visits .stat-text').innerText = `${formatNumbers(game.visits)} Visits`;
-            card.querySelector('.game-genre .stat-text').innerText = `${game.genre || "Experience"}`;
+            card.querySelector('.game-genre .stat-text').innerText = `${game.genre_l1 || game.genre || "Experience"}`;
             card.querySelector('.game-date .stat-text').innerText = `${formatCreationDate(game.created)}`;
 
             const voteInfo = votesData.data.find(v => v.id === game.id);
