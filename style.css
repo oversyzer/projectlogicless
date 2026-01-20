@@ -20,7 +20,6 @@ body {
     user-select: none;         /* Padrão */
 }
 
-/* Proteção contra arrastar imagens */
 img {
     -webkit-user-drag: none;
 }
