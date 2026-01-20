@@ -121,18 +121,19 @@ main {
 }
 
 section {
-    padding: 120px 20px;
+    padding: 80px 20px; /* Reduzi de 120px para 80px */
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center; /* Garante centralização vertical se houver altura definida */
     text-align: center;
-    /* Adicionando bordas finas no topo e base de cada sessão */
+    min-height: 60vh; /* Faz com que a seção tenha uma altura mínima robusta */
     border-top: 0.2px solid rgba(255, 255, 255, 0.164);
-    border-bottom: 0px solid rgba(255, 255, 255, 0.164);
 }
 
 #about {
     border-top: none;
+    padding-top: 40px; /* Menos espaço no topo para compensar o padding do main */
 }
 
 .container {
@@ -144,7 +145,8 @@ section {
 .section-title {
     font-size: 55px;
     font-weight: 800;
-    margin-bottom: 50px;
+    margin-top: 0;      /* Remove margem extra no topo */
+    margin-bottom: 40px; /* Espaço controlado até os cards */
     text-transform: uppercase;
 }
 
@@ -241,14 +243,19 @@ section {
 .game-stats p {
     font-size: 14px;
     color: #aaa;
-    margin: 6px 0; /* Espaçamento entre estatísticas mais justo */
+    margin: 6px 0;
     display: flex;
     align-items: center;
-    
-    /* ADICIONADO: Controle de texto que transborda (para consistência) */
+    width: 100%; /* Garante que ocupe a largura total do card */
+    overflow: hidden; /* Impede que o conteúdo saia do parágrafo */
+}
+
+.stat-text {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: block; /* Necessário para o text-overflow funcionar em spans */
+    width: 100%;
 }
 
 /* Nova classe para os ícones */

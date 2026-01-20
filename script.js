@@ -37,7 +37,6 @@ if (mobileMenu && navMenu) {
 
 // --- Integração com a API do Roblox ---
 
-const universeIds = ["996458434", "6713567019", "8949221887", "8348990406"];
 // Adicionando um timestamp ao proxy para evitar cache viciado
 const proxy = "https://corsproxy.io/?cache=" + new Date().getTime() + "&url=";
 
@@ -54,23 +53,60 @@ function formatCreationDate(isoString) {
 }
 
 async function fetchRobloxData() {
+    // 1. Extrai os IDs dinamicamente do HTML
+    const gameCards = document.querySelectorAll('.game-card');
+    const placeIds = [];
+    const universeIds = [];
+
+    gameCards.forEach(card => {
+        const href = card.getAttribute('href');
+        const placeIdMatch = href.match(/games\/(\d+)/); // Extrai o número (placeId) da URL
+
+        if (placeIdMatch && placeIdMatch[1]) {
+            placeIds.push(placeIdMatch[1]);
+        }
+        
+        // Extrai o universeId do ID do card (formato: "game-UNIVERSEID")
+        const universeId = card.id.replace('game-', '');
+        if (universeId) {
+            universeIds.push(universeId);
+        }
+    });
+
+    if (universeIds.length === 0 || placeIds.length === 0) {
+        console.error("Nenhum ID de jogo encontrado nos cards.");
+        return;
+    }
+
     try {
+        // 2. Faz as chamadas de API
+        // Chamada NOVA para pegar 'sourceName' usando placeIds
+        const placeDetailsRes = await fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games/multiget-place-details?placeIds=' + placeIds.join(','))}`);
+        const placeDetailsData = await placeDetailsRes.json();
+
+        // Chamadas EXISTENTES para estatísticas e ícones usando universeIds
         const detailsRes = await fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games?universeIds=' + universeIds.join(','))}`);
         const detailsData = await detailsRes.json();
 
         const votesRes = await fetch(`${proxy}${encodeURIComponent('https://games.roblox.com/v1/games/votes?universeIds=' + universeIds.join(','))}`);
         const votesData = await votesRes.json();
 
-        // Busca todos os ícones de uma vez para otimizar
         const iconsRes = await fetch(`${proxy}${encodeURIComponent('https://thumbnails.roblox.com/v1/games/icons?universeIds=' + universeIds.join(',') + '&size=512x512&format=Png&isCircular=false')}`);
         const iconsData = await iconsRes.json();
 
+        // 3. Combina os dados e atualiza a página
         for (const game of detailsData.data) {
             const card = document.getElementById(`game-${game.id}`);
             if (!card) continue;
 
-            // Preenche as informações básicas
-            card.querySelector('.game-name').innerText = game.name;
+            // Encontra os detalhes do "place" correspondentes usando o universeId
+            const placeDetail = placeDetailsData.find(pd => pd.universeId === game.id);
+            
+            // Prioriza o 'sourceName', se não existir, usa o 'name' normal
+            const displayName = placeDetail && placeDetail.sourceName ? placeDetail.sourceName : game.name;
+            card.querySelector('.game-name').innerText = displayName;
+
+            // O resto das informações continua igual
             card.querySelector('.game-visits .stat-text').innerText = `${formatNumbers(game.visits)} Visits`;
             
             const genreText = game.genre_l1 || game.genre || "Experience";
@@ -78,7 +114,6 @@ async function fetchRobloxData() {
 
             card.querySelector('.game-date .stat-text').innerText = `${formatCreationDate(game.created)}`;
 
-            // Preenche os votos
             const voteInfo = votesData.data.find(v => v.id === game.id);
             if (voteInfo) {
                 const total = voteInfo.upVotes + voteInfo.downVotes;
@@ -86,14 +121,13 @@ async function fetchRobloxData() {
                 card.querySelector('.game-approval .stat-text').innerText = `${percent}% Approval`;
             }
 
-            // Pega o ícone do jogo e aplica como fundo
             const thumbContainer = card.querySelector('.game-thumb');
             const iconInfo = iconsData.data.find(i => i.targetId === game.id);
 
             if (iconInfo && iconInfo.imageUrl) {
                 thumbContainer.style.backgroundImage = `url('${iconInfo.imageUrl}')`;
             } else {
-                thumbContainer.style.backgroundColor = '#222'; // Cor de fallback
+                thumbContainer.style.backgroundColor = '#222';
             }
         }
     } catch (e) { 
@@ -124,14 +158,8 @@ document.querySelectorAll('.game-card').forEach((card) => {
 });
 
 // --- Proteção Contra Inspeção e Cópia ---
-
 if (!DEBUG_MODE) {
-    // Bloquear clique direito
-    document.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-    });
-
-    // Bloquear atalhos de teclado
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
     document.addEventListener('keydown', (e) => {
         if (
             e.key === 'F12' ||
